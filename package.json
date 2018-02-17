@@ -1,0 +1,32 @@
+{
+  "name": "vue-ioc",
+  "version": "1.0.0",
+  "description": "VueJS IoC container and DI",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV='production' npm run webpack",
+    "dev": "cross-env NODE_ENV='development' npm run webpack",
+    "webpack": "node node_modules/webpack/bin/webpack.js --progress --config=./webpack"
+  },
+  "keywords": [
+    "Vue",
+    "VueJS",
+    "DI",
+    "IoC"
+  ],
+  "author": "Gleb Ivanov<realglebivanov@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "es7-reflect-metadata": "^1.6.0",
+    "ts-loader": "^3.5.0",
+    "tslint": "^5.9.1",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.7.2",
+    "webpack": "^3.11.0"
+  },
+  "dependencies": {
+    "cross-env": "^5.1.3",
+    "vue": "^2.5.13",
+    "webpack-merge": "^4.1.1"
+  }
+}
