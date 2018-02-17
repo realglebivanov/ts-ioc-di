@@ -4,7 +4,7 @@ import { Container } from '@/container/container';
 import { ConstructorResolver, PropertyResolver, Property } from './resolvers';
 
 export class ClassBuilder<T extends {[key: string]: any}> {
-    private instance?: T;
+    private product?: T;
     private propertyResolver: PropertyResolver<T>;
     private constructorResolver: ConstructorResolver<T>;
 
@@ -13,13 +13,13 @@ export class ClassBuilder<T extends {[key: string]: any}> {
         this.constructorResolver = new ConstructorResolver(concrete, ctorArgs);
     }
 
-    public setInstance(instance: T): ClassBuilder<T> {
-        this.instance = instance;
+    public setProduct(product: T): ClassBuilder<T> {
+        this.product = product;
         return this;
     }
 
-    public getInstance(): T {
-        return this.instance as T;
+    public getProduct(): T {
+        return this.product as T;
     }
 
     public setContainer(container: Container): ClassBuilder<T> {
@@ -29,13 +29,13 @@ export class ClassBuilder<T extends {[key: string]: any}> {
     }
 
     public createInstance(): ClassBuilder<T> {
-        this.instance = this.constructorResolver.createInstance();
+        this.product = this.constructorResolver.createInstance();
         return this;
     }
 
     public injectPropertyDependencies(): ClassBuilder<T> {
         this.propertyResolver.forEachProperty(
-            (property: Property) => (<T>this.instance)[property.name] = property.value
+            (property: Property) => (<T> this.product)[property.name] = property.value
         );
         return this;
     }

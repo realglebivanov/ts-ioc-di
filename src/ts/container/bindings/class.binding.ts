@@ -20,6 +20,6 @@ export class ClassBinding<T> implements Binding<T> {
         return this.classBuilder.setContainer(container)
             .createInstance()
             .injectPropertyDependencies()
-            .getInstance();
+            .getProduct();
     }
 }

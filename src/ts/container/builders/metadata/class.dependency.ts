@@ -1,8 +1,9 @@
+import { Class } from '@/container/class';
 import { Token } from './token';
 
 export class ClassDependency<T> {
     public constructor(
-        private type: any,
+        private type: Class<any>,
         private name?: string
     ) { }
 
@@ -11,7 +12,7 @@ export class ClassDependency<T> {
     }
 
     public isInjectableClass(): boolean {
-        return this.type && this.type.injectable;
+        return Boolean(this.type && this.type.injectable);
     }
 
     public getToken(): Token<T> {

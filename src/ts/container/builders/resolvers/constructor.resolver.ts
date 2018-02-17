@@ -31,7 +31,7 @@ export class ConstructorResolver<T> {
 
     private resolve(dependency: ClassDependency<any>): any {
         return dependency.isInjectableClass() ?
-            (<Container> this.container).resolve(dependency.getToken()) :
+            (<Container> this.container).resolve(dependency.getToken().getSource()) :
             this.customCtorArgs[this.ctorArgsCounter++];
     }
 }

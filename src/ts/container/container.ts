@@ -1,4 +1,3 @@
-import { Token } from '@/container/builders';
 import { Class } from '@/container/class';
 
 import {
@@ -13,9 +12,9 @@ import {
 export class Container {
     private bindings: Map<Class<any>, Binding<any>> = new Map();
 
-    public resolve<T>(token: Token<T>): T {
-        let foundBinding = this.bindings.get(token.getSource());
-        foundBinding = foundBinding || new ClassBinding(token.getSource());
+    public resolve<T>(abstract: Class<T>): T {
+        let foundBinding = this.bindings.get(abstract);
+        foundBinding = foundBinding || new ClassBinding(abstract);
         return foundBinding.resolve(this);
     }
 

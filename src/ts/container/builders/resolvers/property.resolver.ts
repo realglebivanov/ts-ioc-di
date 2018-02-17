@@ -20,14 +20,14 @@ export class PropertyResolver<T> {
 
     public forEachProperty(callback: PropertyCallback): void {
         this.metadata.getPropertyDependencies().forEach(
-            (dependency: ClassDependency<any>) => callback(this.toProperty(dependency))
+            (dependency: ClassDependency<any>) => callback(this.resolve(dependency))
         );
     }
 
-    private toProperty(dependency: ClassDependency<any>): Property {
+    private resolve(dependency: ClassDependency<any>): Property {
         return {
             name: dependency.getName(),
-            value: (<Container> this.container).resolve(dependency.getToken())
+            value: (<Container> this.container).resolve(dependency.getToken().getSource())
         };
     }
 }

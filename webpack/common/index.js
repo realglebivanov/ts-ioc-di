@@ -23,7 +23,7 @@ module.exports = (paths) => ({
           test: /\.ts$/,
           enforce: 'pre',
           loader: 'tslint-loader',
-          exclude: [paths.ts.srcDir]
+          include: [paths.ts.srcDir]
       }, {
           test: [/\.ts$/, /\.js$/],
           loader: 'ts-loader'
