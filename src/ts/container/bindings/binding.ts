@@ -1,7 +1,7 @@
 import { Container } from '@/container/container';
-import { Token } from '@/container/builders';
+import { Class } from '@/container/class';
 
 export interface Binding<T> {
-    getToken(): Token<T>;
+    getClass(): Class<T>;
     resolve(container: Container): T;
 }

@@ -3,23 +3,17 @@ import { Container } from '@/container/container';
 import { ClassMetadata, ClassDependency } from '@/container/builders/metadata';
 
 export class ConstructorResolver<T> {
-    private ctorArgsCounter: number = 0;
-    private customCtorArgs: Array<any>;
-    private metadata: ClassMetadata<T>;
-    private concrete: Class<T>;
-    private container?: Container;
+    private extraCtorArgsCounter: number = 0;
+    private extraCtorArgs: Array<any> = [];
 
-    public constructor(concrete: Class<T>, customCtorArgs: Array<any>) {
-        this.concrete = concrete;
-        this.metadata = new ClassMetadata(concrete);
-        this.customCtorArgs = customCtorArgs;
-    }
+    public constructor(
+        private container: Container,
+        private concrete: Class<T>,
+        private metadata: ClassMetadata<T>
+    ) { }
 
-    public setContainer(container: Container): void {
-        this.container = container;
-    }
-
-    public createInstance(): T {
+    public createInstance(extraCtorArgs: Array<any>): T {
+        this.extraCtorArgs = extraCtorArgs;
         return new this.concrete(...this.resolveCtorDependencies());
     }
 
@@ -31,7 +25,7 @@ export class ConstructorResolver<T> {
 
     private resolve(dependency: ClassDependency<any>): any {
         return dependency.isInjectableClass() ?
-            (<Container> this.container).resolve(dependency.getToken().getSource()) :
-            this.customCtorArgs[this.ctorArgsCounter++];
+            this.container.resolve(dependency.getClass()) :
+            this.extraCtorArgs[this.extraCtorArgsCounter++];
     }
 }

@@ -39,6 +39,6 @@ export class Container {
     }
 
     private register<T>(binding: Binding<T>): void {
-        this.bindings.set(binding.getToken().getSource(), binding);
+        this.bindings.set(binding.getClass(), binding);
     }
 }

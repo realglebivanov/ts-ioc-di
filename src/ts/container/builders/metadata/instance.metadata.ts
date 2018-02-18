@@ -9,18 +9,21 @@ export class InstanceMetadata<T> {
     ) { }
 
     public getDependencies(): Array<ClassDependency<any>> {
-        return this.getInjectedProperties().map(
-            (name: string) => new ClassDependency(this.getPropertyDependency(name), name)
-        );
+        return this.getInjectedProperties()
+            .map((propertyKey: string) => this.createDependency(propertyKey))
+            .filter((dependency: ClassDependency<any>) => dependency.isInjectableClass());
     }
 
-    public defineMetadata<D>(propertyKey: string, dependency: D): void {
-        Reflect.defineMetadata('inject:property', dependency, this.target, propertyKey);
-        Reflect.defineMetadata('inject:properties', this.injectedPropertiesWith(propertyKey), this.target);
+    private createDependency(propertyKey: string): ClassDependency<any> {
+        return new ClassDependency(this.getPropertyDependency(propertyKey), propertyKey);
     }
 
     private getPropertyDependency(propertyKey: string): any {
-        return Reflect.getMetadata('inject:property', this.target, propertyKey);
+        return Reflect.getMetadata('design:type', this.target.prototype, propertyKey);
+    }
+
+    public defineMetadata(propertyKey: string): void {
+        Reflect.defineMetadata('inject:properties', this.injectedPropertiesWith(propertyKey), this.target);
     }
 
     private injectedPropertiesWith(propertyKey: string): Array<string> {

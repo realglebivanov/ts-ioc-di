@@ -1,6 +1,5 @@
 import { Binding } from './binding';
 import { Container } from '@/container/container';
-import { Token } from '@/container/builders';
 import { Class } from '@/container/class';
 
 export class ValueBinding<T> implements Binding<T> {
@@ -9,8 +8,8 @@ export class ValueBinding<T> implements Binding<T> {
         private value: T
     ) { }
 
-    public getToken(): Token<T> {
-        return new Token(this.abstract);
+    public getClass(): Class<T> {
+        return this.abstract;
     }
 
     public resolve(_: Container): T {

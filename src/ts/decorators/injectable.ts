@@ -1,5 +1,5 @@
 import { Class } from '@/container/class';
 
-export function Injectable<V, K extends Class<V>>(ctor: K) {
+export function Injectable<I, C extends Class<I>>(ctor: C): C {
     return Object.assign(ctor, {injectable: true});
 }

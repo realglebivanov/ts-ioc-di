@@ -1,25 +1,27 @@
 import { Binding } from './binding';
 import { Class } from '@/container/class';
 import { Container } from '@/container/container';
-import { ClassBuilder, Token } from '@/container/builders';
+import { ClassBuilderFactory, ClassBuilder } from '@/container/builders';
 
 export class ClassBinding<T> implements Binding<T> {
-    private abstract: Class<T>;
-    private classBuilder: ClassBuilder<T>;
+    public constructor(
+        private abstract: Class<T>,
+        private concrete: Class<T> = abstract,
+        private extraCtorArgs: Array<any> = []
+    ) { }
 
-    public constructor(abstract: Class<T>, concrete: Class<T> = abstract, args: Array<any> = []) {
-        this.abstract = abstract;
-        this.classBuilder = new ClassBuilder(concrete, args);
-    }
-
-    public getToken(): Token<T> {
-        return new Token(this.abstract);
+    public getClass(): Class<T> {
+        return this.abstract;
     }
 
     public resolve(container: Container): T {
-        return this.classBuilder.setContainer(container)
-            .createInstance()
-            .injectPropertyDependencies()
+        return this.getClassBuilder(container)
+            .createInstance(this.extraCtorArgs)
+            .injectProperties()
             .getProduct();
+    }
+
+    private getClassBuilder(container: Container): ClassBuilder<T> {
+        return ClassBuilderFactory.create(this.concrete, container);
     }
 }

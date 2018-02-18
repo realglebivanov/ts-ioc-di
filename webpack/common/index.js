@@ -2,7 +2,7 @@ const { LoaderOptionsPlugin } = require('webpack');
 
 module.exports = (paths) => ({
     context: paths.ts.srcDir,
-    entry: { app: './index' },
+    entry: { index: './index' },
 
     output: {
         path: paths.ts.buildDir,
@@ -25,8 +25,13 @@ module.exports = (paths) => ({
           loader: 'tslint-loader',
           include: [paths.ts.srcDir]
       }, {
-          test: [/\.ts$/, /\.js$/],
-          loader: 'ts-loader'
+          test: [/\.ts$/],
+          loader: 'ts-loader',
+          include: [paths.ts.srcDir]
+      }, {
+          test: [/\.js$/],
+          loader: 'babel-loader',
+          include: [paths.root('node_modules')]
       }]
     },
 
