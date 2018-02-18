@@ -11,10 +11,6 @@ export class PropertyResolver<T> {
         private container: Container
     ) { }
 
-    public setContainer(container: Container): void {
-        this.container = container;
-    }
-
     public forEachProperty(callback: PropertyCallback): void {
         this.metadata.getPropertyDependencies().forEach(
             (dependency: ClassDependency<any>) => callback(this.resolve(dependency))
