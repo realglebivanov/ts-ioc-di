@@ -6,7 +6,6 @@ module.exports = (paths) => ({
 
     output: {
         path: paths.ts.buildDir,
-        publicPath: paths.ts.buildPath,
         filename: '[name].js',
         libraryTarget: 'umd',
         umdNamedDefine: true
@@ -30,10 +29,6 @@ module.exports = (paths) => ({
           test: [/\.ts$/],
           loader: 'ts-loader',
           include: [paths.ts.srcDir]
-      }, {
-          test: [/\.js$/],
-          loader: 'babel-loader',
-          include: [paths.root('node_modules')]
       }]
     },
 
