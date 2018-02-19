@@ -1,5 +1,3 @@
-import Reflect from 'es7-reflect-metadata';
-
 import { Class } from '@/container/class';
 import { ClassDependency } from './class.dependency';
 

@@ -24,7 +24,7 @@ export class ConstructorResolver<T> {
     }
 
     private resolve(dependency: ClassDependency<any>): any {
-        return dependency.isInjectableClass() ?
+        return dependency.isInjectable() ?
             this.container.resolve(dependency.getClass()) :
             this.extraCtorArgs[this.extraCtorArgsCounter++];
     }

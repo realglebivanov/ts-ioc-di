@@ -18,6 +18,8 @@ module.exports = (paths) => ({
         alias: { '@': paths.ts.srcDir }
     },
 
+    externals: ['reflect-metadata'],
+
     module: {
       rules: [{
           test: /\.ts$/,

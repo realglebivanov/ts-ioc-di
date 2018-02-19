@@ -1,5 +1,3 @@
-import Reflect from 'es7-reflect-metadata';
-
 import { Class } from '@/container/class';
 import { ClassDependency } from './class.dependency';
 
@@ -9,20 +7,18 @@ export class InstanceMetadata<T> {
     ) { }
 
     public getDependencies(): Array<ClassDependency<any>> {
-        return this.getInjectedProperties()
-            .map((propertyKey: string) => this.createDependency(propertyKey))
-            .filter((dependency: ClassDependency<any>) => dependency.isInjectableClass());
+        return this.getInjectedProperties().map((propertyKey: string) => {
+            return new ClassDependency(this.getDependencyClass(propertyKey), propertyKey);
+        });
     }
 
-    private createDependency(propertyKey: string): ClassDependency<any> {
-        return new ClassDependency(this.getPropertyDependency(propertyKey), propertyKey);
+    private getDependencyClass(propertyKey: string): any {
+        return Reflect.getMetadata('inject:type', Object.getPrototypeOf(this.target), propertyKey)
+            || Reflect.getMetadata('design:type', Object.getPrototypeOf(this.target), propertyKey);
     }
 
-    private getPropertyDependency(propertyKey: string): any {
-        return Reflect.getMetadata('design:type', this.target.prototype, propertyKey);
-    }
-
-    public defineMetadata(propertyKey: string): void {
+    public defineMetadata<D>(propertyKey: string, dependency: D): void {
+        Reflect.defineMetadata('inject:type', dependency, Object.getPrototypeOf(this.target), propertyKey);
         Reflect.defineMetadata('inject:properties', this.injectedPropertiesWith(propertyKey), this.target);
     }
 

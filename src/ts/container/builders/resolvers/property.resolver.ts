@@ -12,9 +12,9 @@ export class PropertyResolver<T> {
     ) { }
 
     public forEachProperty(callback: PropertyCallback): void {
-        this.metadata.getPropertyDependencies().forEach(
-            (dependency: ClassDependency<any>) => callback(this.resolve(dependency))
-        );
+        this.metadata.getPropertyDependencies()
+            .filter((dependency: ClassDependency<any>) => dependency.isInjectable())
+            .forEach((dependency: ClassDependency<any>) => callback(this.resolve(dependency)));
     }
 
     private resolve(dependency: ClassDependency<any>): Property {

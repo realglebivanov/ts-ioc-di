@@ -16,7 +16,7 @@ export class ClassMetadata<T> {
         return this.instanceMetadata.getDependencies();
     }
 
-    public addPropertyDependency(propertyKey: string): void {
-        this.instanceMetadata.defineMetadata(propertyKey);
+    public addPropertyDependency<D>(propertyKey: string, dependency: D): void {
+        this.instanceMetadata.defineMetadata(propertyKey, dependency);
     }
 }

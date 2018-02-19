@@ -1,22 +1,44 @@
+import { expect, assert } from 'chai';
+
 import { Container } from '@/container/container';
-import { Singleton } from './doubles/singleton';
+import { Root, Child, Singleton, Descendant } from './doubles';
 
-describe('Container', () => {
-    let container: Container;
+describe(Container.name, function () {
+    const container: Container = new Container();
 
-    beforeEach(() => container = new Container());
-    beforeEach(() => Singleton.id = 0);
+    beforeEach(() => container.flush());
 
-    it('resolves classes that are not bound to container', () => {
-        // const root: TestRoot = container.resolve(TestRoot);
-        // expect(root).toBeDefined();
-        // expect(root.child).toBeDefined();
-        // expect(root.anotherChild).toBeDefined();
-        // expect(root.child.singleton).toBeDefined();
-        // expect(root.anotherChild && root.anotherChild.singleton).toBeDefined();
+    it('resolves not bound classes', function () {
+        const root: Root = container.resolve(Root);
+        assert.instanceOf(root, Root);
+        assert.instanceOf(root.child, Child);
+        assert.instanceOf(root.child.singleton, Singleton);
+        assert.instanceOf(root.singleton, Singleton);
     });
 
-    it('should pass again', () => {
-        expect(true).toEqual(true);
+    it('binds singletons', function () {
+        container.singleton(Singleton);
+        const root: Root = container.resolve(Root);
+        const anotherRoot: Root = container.resolve(Root);
+        expect(root.singleton).to.equal(anotherRoot.singleton);
+    });
+
+    it('binds abstracts to concretes', function () {
+        container.bind(Root, Descendant);
+        const root: Root = container.resolve(Root);
+        assert.instanceOf(root, Descendant);
+    });
+
+    it('binds factories', function () {
+        container.bindFactory(Root, (container: Container) => container.resolve(Child));
+        const root: Root = container.resolve(Root);
+        assert.instanceOf(root, Child);
+    });
+
+    it('binds singleton factories', function () {
+        container.singletonFactory(Singleton, () => new Singleton());
+        const singleton: Singleton = container.resolve(Singleton);
+        const anotherSingleton: Singleton = container.resolve(Singleton);
+        expect(singleton).to.equal(anotherSingleton);
     });
 });

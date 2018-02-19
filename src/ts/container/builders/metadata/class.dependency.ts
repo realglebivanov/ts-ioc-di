@@ -14,7 +14,7 @@ export class ClassDependency<T> {
         return this.name || '';
     }
 
-    public isInjectableClass(): boolean {
+    public isInjectable(): boolean {
         return Boolean(this.type && this.type.injectable);
     }
 }
