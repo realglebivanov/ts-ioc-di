@@ -5,6 +5,7 @@ module.exports = (paths) => ({
     watch: false,
     target: 'node',
     devtool: 'inline-source-map',
+    stats: 'minimal',
 
     externals: [nodeExternals()],
     context: paths.ts.specDir,
@@ -19,7 +20,7 @@ module.exports = (paths) => ({
       rules: [{
           test: [/\.ts$/],
           loader: 'ts-loader',
-          include: [paths.ts.specDir, paths.ts.srcDir]
+          include: [paths.ts.specDir]
       }]
     },
 
