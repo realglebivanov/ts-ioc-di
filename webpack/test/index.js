@@ -20,13 +20,10 @@ module.exports = (paths) => ({
       rules: [{
           test: [/\.ts$/],
           loader: 'ts-loader',
-          include: [paths.ts.specDir]
+          include: [paths.ts.specDir],
+          options: { compilerOptions: { declaration: false } }
       }]
     },
 
-    plugins: [
-        new WebpackMochaPlugin({
-            codeCoverage: false
-        })
-    ]
+    plugins: [new WebpackMochaPlugin({ codeCoverage: false })]
 });
