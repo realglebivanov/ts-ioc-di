@@ -1,7 +1,7 @@
 import { Container } from '@/container';
 import { MethodMetadata } from '@/metadata';
-import { Dependency } from './dependency';
 
+import { Dependency } from './dependency';
 import { ResolvedDependencyCallback } from './resolved-dependency';
 
 export class MethodResolver<T> {
@@ -18,8 +18,8 @@ export class MethodResolver<T> {
     }
 
     private createNewMethod(originalMethod: Function, resolvedDeps: Array<any>): Function {
-        return function (...args: Array<any>) {
-            return originalMethod.apply(this, resolvedDeps.concat(args));
+        return function () {
+            return originalMethod.apply(this, resolvedDeps.concat(arguments));
         };
     }
 

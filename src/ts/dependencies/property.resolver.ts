@@ -1,7 +1,9 @@
+import lazy from 'lazy.js';
+
 import { Container } from '@/container';
 import { PropertyMetadata } from '@/metadata';
-import { Dependency } from './dependency';
 
+import { Dependency } from './dependency';
 import { ResolvedDependency, ResolvedDependencyCallback } from './resolved-dependency';
 
 export class PropertyResolver<T> {
@@ -11,9 +13,10 @@ export class PropertyResolver<T> {
     ) { }
 
     public resolveAll(callback: ResolvedDependencyCallback): void {
-        this.metadata.map((property: PropertyMetadata<T, any>) => property.getDependency())
+        lazy(this.metadata)
+            .map((property: PropertyMetadata<T, any>) => property.getDependency())
             .filter((dependency: Dependency<any>) => dependency.isInjectable())
-            .forEach((dependency: Dependency<any>) => callback(this.resolve(dependency)));
+            .each((dependency: Dependency<any>) => callback(this.resolve(dependency)));
     }
 
     private resolve(dependency: Dependency<any>): ResolvedDependency {

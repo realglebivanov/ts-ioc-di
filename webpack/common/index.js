@@ -17,7 +17,7 @@ module.exports = (paths) => ({
         alias: { '@': paths.ts.srcDir }
     },
 
-    externals: ['reflect-metadata'],
+    externals: ['reflect-metadata', 'lazy.js'],
 
     module: {
       rules: [{

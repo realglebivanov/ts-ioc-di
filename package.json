@@ -34,6 +34,8 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
+    "@types/lazy.js": "^0.3.28",
+    "lazy.js": "^0.5.1",
     "reflect-metadata": "^0.1.12",
     "typescript": "^2.7.2"
   }
