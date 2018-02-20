@@ -38,9 +38,7 @@ export class ClassBuilder<T extends Dictionary> {
     }
 
     public injectMethods(): ClassBuilder<T> {
-        this.methodResolver.resolveAll((method: ResolvedDependency) => {
-            Object.getPrototypeOf(this.product)[method.name] = method.value;
-        });
+        this.methodResolver.resolveDependencies();
         return this;
     }
 }

@@ -3,17 +3,24 @@ import { Dependency } from '@/dependencies';
 import { Dictionary } from '@/dictionary';
 
 export class MethodMetadata<T extends Dictionary> {
-    public constructor(
-        private target: Class<T> | T,
-        private name?: string
-    ) { }
+    private resolvedDeps: Array<any> = [];
 
-    public getOriginalMethod(): Function {
-        return this.name === undefined ? this.target : this.target[this.name];
+    public constructor(
+        private name: string,
+        private target: Class<T> | T,
+        private descriptor: PropertyDescriptor
+    ) {
+        this.decorateTargetMethod(this, descriptor.value);
     }
 
-    public getName(): string {
-        return this.name || '';
+    public setResolvedDeps(resolvedDeps: Array<any>): void {
+        this.resolvedDeps = resolvedDeps;
+    }
+
+    public decorateTargetMethod(context: MethodMetadata<T>, originalMethod: Function): void {
+        this.descriptor.value = function () {
+            return originalMethod.apply(this, context.resolvedDeps.concat(arguments));
+        };
     }
 
     public getDependencies(): Array<Dependency<any>> {
@@ -21,6 +28,6 @@ export class MethodMetadata<T extends Dictionary> {
     }
 
     private getParamTypes(): Array<any> {
-        return Reflect.getOwnMetadata('design:paramtypes', this.target, <string> this.name) || [];
+        return Reflect.getOwnMetadata('design:paramtypes', this.target, this.name) || [];
     }
 }

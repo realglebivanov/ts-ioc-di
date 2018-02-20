@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@/decorators';
+import { Inject, Injectable, InjectArgs } from '@/decorators';
 import { Child } from './child';
 import { Singleton } from './singleton';
 
@@ -11,7 +11,7 @@ export class Root {
     @Inject(Singleton)
     public singleton?: Singleton;
 
-    @Inject()
+    @InjectArgs()
     public test(s?: Singleton): Singleton {
         return s as Singleton;
     }

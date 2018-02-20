@@ -1,10 +1,9 @@
-import { Class } from '@/class';
 import { Dependency } from '@/dependencies';
 
 export class PropertyMetadata<T, D> {
     public constructor(
-        private target: Class<T>,
         private name: string,
+        private target: T,
         private type: D
     ) { }
 
@@ -13,6 +12,6 @@ export class PropertyMetadata<T, D> {
     }
 
     private getType(): any {
-        return this.type || Reflect.getMetadata('design:type', this.target.prototype, this.name);
+        return this.type || Reflect.getMetadata('design:type', this.target, this.name);
     }
 }

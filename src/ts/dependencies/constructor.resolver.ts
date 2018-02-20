@@ -1,6 +1,6 @@
 import { Class } from '@/class';
 import { Container } from '@/container';
-import { MethodMetadata } from '@/metadata';
+import { ConstructorMetadata } from '@/metadata';
 import { Dependency } from './dependency';
 
 export class ConstructorResolver<T> {
@@ -10,7 +10,7 @@ export class ConstructorResolver<T> {
     public constructor(
         private container: Container,
         private concrete: Class<T>,
-        private metadata: MethodMetadata<T>
+        private metadata: ConstructorMetadata<T>
     ) { }
 
     public resolveWith(extraCtorArgs: Array<any>): T {
