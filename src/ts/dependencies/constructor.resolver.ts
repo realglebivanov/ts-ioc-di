@@ -1,6 +1,7 @@
-import { Class } from '@/container/class';
-import { Container } from '@/container/container';
-import { ClassMetadata, ClassDependency } from '@/container/builders/metadata';
+import { Class } from '@/class';
+import { Container } from '@/container';
+import { MethodMetadata } from '@/metadata';
+import { Dependency } from './dependency';
 
 export class ConstructorResolver<T> {
     private extraCtorArgsCounter: number = 0;
@@ -9,21 +10,21 @@ export class ConstructorResolver<T> {
     public constructor(
         private container: Container,
         private concrete: Class<T>,
-        private metadata: ClassMetadata<T>
+        private metadata: MethodMetadata<T>
     ) { }
 
-    public createInstance(extraCtorArgs: Array<any>): T {
+    public resolveWith(extraCtorArgs: Array<any>): T {
         this.extraCtorArgs = extraCtorArgs;
         return new this.concrete(...this.resolveCtorDependencies());
     }
 
     private resolveCtorDependencies(): Array<any> {
-        return this.metadata.getCtorDependencies().map(
-            (dependency: ClassDependency<any>) => this.resolve(dependency)
+        return this.metadata.getDependencies().map(
+            (dependency: Dependency<any>) => this.resolve(dependency)
         );
     }
 
-    private resolve(dependency: ClassDependency<any>): any {
+    private resolve(dependency: Dependency<any>): any {
         return dependency.isInjectable() ?
             this.container.resolve(dependency.getClass()) :
             this.extraCtorArgs[this.extraCtorArgsCounter++];

@@ -10,4 +10,9 @@ export class Root {
 
     @Inject(Singleton)
     public singleton?: Singleton;
+
+    @Inject()
+    public test(s?: Singleton): Singleton {
+        return s as Singleton;
+    }
 }

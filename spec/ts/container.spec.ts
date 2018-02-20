@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 
-import { Container } from '@/container/container';
-import { Root, Child, Singleton, Descendant } from './doubles';
+import { Container } from '@/container';
+import { Root, Child, Singleton, Descendant } from './fixtures';
 
 describe(Container.name, function () {
     const container: Container = new Container();
@@ -30,9 +30,9 @@ describe(Container.name, function () {
     });
 
     it('binds factories', function () {
-        container.bindFactory(Root, (container: Container) => container.resolve(Child));
+        container.bindFactory(Root, (container: Container) => container.resolve(Descendant));
         const root: Root = container.resolve(Root);
-        assert.instanceOf(root, Child);
+        assert.instanceOf(root, Descendant);
     });
 
     it('binds singleton factories', function () {
@@ -40,5 +40,18 @@ describe(Container.name, function () {
         const singleton: Singleton = container.resolve(Singleton);
         const anotherSingleton: Singleton = container.resolve(Singleton);
         expect(singleton).to.equal(anotherSingleton);
+    });
+
+    it('binds instances', function () {
+        container.instance(Root, container.resolve(Descendant));
+        const firstInstance: Root = container.resolve(Root);
+        const secondInstance: Root = container.resolve(Root);
+        assert.instanceOf(firstInstance, Root);
+        expect(firstInstance).to.equal(secondInstance);
+    });
+
+    it('injects dependencies in methods', function () {
+        const root: Root = container.resolve(Root);
+        assert.instanceOf(root.test(), Singleton);
     });
 });

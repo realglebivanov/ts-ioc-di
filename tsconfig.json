@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "noImplicitAny": true,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "strict": true,
     "strictNullChecks": true,
     "declaration": true,

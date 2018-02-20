@@ -1,6 +1,6 @@
-import { Class } from '@/container/class';
+import { Class } from '@/class';
 
-export class ClassDependency<T> {
+export class Dependency<T> {
     public constructor(
         private type: Class<T>,
         private name?: string

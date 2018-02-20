@@ -1,7 +1,7 @@
 import { Binding } from './binding';
-import { Class } from '@/container/class';
-import { Container } from '@/container/container';
-import { ClassBuilderFactory, ClassBuilder } from '@/container/builders';
+import { Class } from '@/class';
+import { Container } from '@/container';
+import { ClassBuilder, ClassBuilderFactory } from '@/builders';
 
 export class ClassBinding<T> implements Binding<T> {
     public constructor(
@@ -18,6 +18,7 @@ export class ClassBinding<T> implements Binding<T> {
         return this.getClassBuilder(container)
             .createInstance(this.extraCtorArgs)
             .injectProperties()
+            .injectMethods()
             .getProduct();
     }
 

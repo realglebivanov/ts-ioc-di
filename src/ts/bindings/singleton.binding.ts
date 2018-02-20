@@ -1,6 +1,6 @@
 import { Binding } from './binding';
-import { Container } from '@/container/container';
-import { Class } from '@/container/class';
+import { Container } from '@/container';
+import { Class } from '@/class';
 
 export class SingletonBinding<T> implements Binding<T> {
     private resolved: T | null = null;

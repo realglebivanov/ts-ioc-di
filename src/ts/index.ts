@@ -1,5 +1,5 @@
 import 'reflect-metadata';
 
-export { Container } from './container/container';
+export { Container } from './container';
 export { Injectable, Inject } from './decorators';
-export { ClassBuilderFactory } from './container/builders';
+export { ClassBuilderFactory } from './builders';

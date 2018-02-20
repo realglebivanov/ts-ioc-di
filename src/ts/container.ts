@@ -1,4 +1,4 @@
-import { Class } from '@/container/class';
+import { Class } from './class';
 
 import {
     Binding,
@@ -22,23 +22,23 @@ export class Container {
         return foundBinding.resolve(this);
     }
 
-    public instance<T>(abstract: Class<T>, instance: T): void {
+    public instance<T, D extends T>(abstract: Class<T>, instance: D): void {
         this.register(new ValueBinding(abstract, instance));
     }
 
-    public singleton<T>(abstract: Class<T>, concrete?: Class<T>, args?: Array<any>): void {
+    public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
         this.register(new SingletonBinding(new ClassBinding(abstract, concrete, args)));
     }
 
-    public singletonFactory<T>(abstract: Class<T>, factory: Factory<T>): void {
+    public singletonFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
         this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
     }
 
-    public bind<T>(abstract: Class<T>, concrete?: Class<T>, args?: Array<any>): void {
+    public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
         this.register(new ClassBinding(abstract, concrete, args));
     }
 
-    public bindFactory<T>(abstract: Class<T>, factory: Factory<T>): void {
+    public bindFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
         this.register(new FactoryBinding(abstract, factory));
     }
 
