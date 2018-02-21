@@ -2,7 +2,7 @@
 Typescript IoC container and DI
 
 # About
-This container can be used to create full graphs of objects using it's features. 
+This container can be used to create full graphs of objects using it's features.
 Dependencies are resolved recursively and are resolved even if they are not explicitly bound to container.
 
 # Features
@@ -18,18 +18,18 @@ Dependencies are resolved recursively and are resolved even if they are not expl
 # Examples
 ## Initialization and bindings
 ```
-import { Container } from 'ts-ioc-di'; 
+import { Container } from 'ts-ioc-di';
 
 const container = new Container();
 
 // binds Concrete to container
-container.bind(Concrete); 
+container.bind(Concrete);
 
 // binds Abstract class to its implementation
-container.bind(Abstract, Concrete); 
+container.bind(Abstract, Concrete);
 
 // binds Abstract class to its implementation with extra constructor arguments
-container.bind(Abstract, Concrete, [1, 10]); 
+container.bind(Abstract, Concrete, [1, 10]);
 
 // binds factory for resolving Abstract
 container.bindFactory(Abstract, (container: Container) => container.resolve(Concrete));
@@ -57,7 +57,7 @@ import { Injectable, Inject, InjectArg, InjectArgs } from 'ts-ioc-di';
 ```
 All classes that should be resolved with DI must be decorated with `@Injectable`
 ```
-@Injectable 
+@Injectable
 class UserRepository { }
 ```
 ### Constructor injection
@@ -139,6 +139,34 @@ class ViewModel {
   }
 }
 ```
+
+## Low-level API
+Low-level api is represented by `ClassBuilder` and `ClassBuilderFactory` which will return you an instance of `ClassBuilder`.
+
+```
+import { Container } from 'ts-ioc-di';
+
+const container = new Container();
+
+class UserService { }
+
+// ...
+
+import { ClassBuilderFactory } from 'ts-ioc-di';
+
+const classBuilder = ClassBuilderFactory.create(UserService, container);
+const extraConstructorArguments = [1, 2, 3];
+
+const userService = classBuilder
+  .createInstance(extraConstructorArguments) // .setInstance(instance)
+  .injectProperties()
+  .injectMethods()
+  .getProduct()
+
+```
+As you can see, you can build classes with that API without directly resolving them from container.
+This is useful for [integration with libraries](https://github.com/glebivanov816/vue-ts-ioc).
+
 ## Pitfalls
 - Primitives are not allowed as bindings keys since Service Locator pattern is discouraged
 - Interfaces are not allowed as bindings keys since they don't have runtime representation
