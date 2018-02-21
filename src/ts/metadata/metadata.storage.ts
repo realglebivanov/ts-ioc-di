@@ -1,5 +1,6 @@
 import { Class } from '@/class';
 import { ClassMetadata } from './class.metadata';
+import { ClassMetadataFactory } from './class.metadata.factory';
 
 export class MetadataStorage<T> {
     public constructor(
@@ -15,7 +16,7 @@ export class MetadataStorage<T> {
     }
 
     private defineMetadata(): ClassMetadata<T> {
-        const newMetadata = new ClassMetadata(this.target);
+        const newMetadata = ClassMetadataFactory.create(this.target);
         Reflect.defineMetadata('@@_inject:metadata', newMetadata, this.target);
         return newMetadata;
     }

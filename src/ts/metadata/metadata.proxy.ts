@@ -28,6 +28,10 @@ export class MetadataProxy<T> {
         return new ConstructorResolver(container, this.target, this.metadata.getConstructor());
     }
 
+    public addMethodParameter<D>(method: string, index: number, type: D): void {
+        this.metadata.addMethodParameter(method, index, type);
+    }
+
     public addMethod(name: string, descriptor: PropertyDescriptor): void {
         this.metadata.addMethod(name, descriptor);
     }

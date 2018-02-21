@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 
 import { Container } from '@/container';
-import { Root, Child, Singleton, Descendant } from './fixtures';
+import { Root, Child, Singleton, Descendant, MockService } from './fixtures';
 
 describe(Container.name, function () {
     const container: Container = new Container();
@@ -53,5 +53,11 @@ describe(Container.name, function () {
     it('injects dependencies in methods', function () {
         const root: Root = container.resolve(Root);
         assert.instanceOf(root.test(), Singleton);
+    });
+
+    it('injects decorated arguments', function () {
+        const child: Child = container.resolve(Child);
+        assert.instanceOf(child.s1, MockService);
+        assert.instanceOf(child.serviceTest(), MockService);
     });
 });

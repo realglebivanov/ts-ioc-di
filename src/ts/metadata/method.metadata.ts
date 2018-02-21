@@ -1,12 +1,12 @@
-import { Dependency } from '@/dependencies';
+import { Dependency, DependencyContainer } from '@/dependencies';
 
 export class MethodMetadata<T> {
     private resolvedDeps: Array<any> = [];
 
     public constructor(
         private name: string,
-        private target: T,
-        private descriptor: PropertyDescriptor
+        private descriptor: PropertyDescriptor,
+        private methodArguments: DependencyContainer<T>
     ) {
         this.decorateTargetMethod(this, descriptor.value);
     }
@@ -22,10 +22,6 @@ export class MethodMetadata<T> {
     }
 
     public getDependencies(): Array<Dependency<any>> {
-        return this.getParamTypes().map((type: any) => new Dependency(type, this.name));
-    }
-
-    private getParamTypes(): Array<any> {
-        return Reflect.getOwnMetadata('design:paramtypes', this.target, this.name) || [];
+        return this.methodArguments.getMethodOrConstructorDependencies(this.name);
     }
 }
