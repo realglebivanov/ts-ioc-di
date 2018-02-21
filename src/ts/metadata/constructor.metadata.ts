@@ -1,8 +1,7 @@
 import { Class } from '@/class';
 import { Dependency } from '@/dependencies';
-import { Dictionary } from '@/dictionary';
 
-export class ConstructorMetadata<T extends Dictionary> {
+export class ConstructorMetadata<T> {
     public constructor(
         private target: Class<T>
     ) { }

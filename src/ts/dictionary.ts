@@ -1,3 +1,3 @@
-export type Dictionary = {
-    [key: string]: any
+export type Dictionary<T = any> = {
+    [key: string]: T
 };

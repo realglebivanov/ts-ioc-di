@@ -1,13 +1,11 @@
-import { Class } from '@/class';
 import { Dependency } from '@/dependencies';
-import { Dictionary } from '@/dictionary';
 
-export class MethodMetadata<T extends Dictionary> {
+export class MethodMetadata<T> {
     private resolvedDeps: Array<any> = [];
 
     public constructor(
         private name: string,
-        private target: Class<T> | T,
+        private target: T,
         private descriptor: PropertyDescriptor
     ) {
         this.decorateTargetMethod(this, descriptor.value);

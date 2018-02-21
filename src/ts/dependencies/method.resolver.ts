@@ -10,9 +10,9 @@ export class MethodResolver<T> {
     ) { }
 
     public resolveDependencies(): void {
-        this.metadata.forEach((method: MethodMetadata<T>) => {
-            method.setResolvedDeps(this.resolveDeps(method));
-        });
+        this.metadata.forEach((method: MethodMetadata<T>) =>
+            method.setResolvedDeps(this.resolveDeps(method))
+        );
     }
 
     private resolveDeps(method: MethodMetadata<T>): Array<any> {

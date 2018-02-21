@@ -2,7 +2,7 @@ import {
     ConstructorResolver,
     PropertyResolver,
     MethodResolver,
-    ResolvedDependency
+    Property
 } from '@/dependencies';
 
 import { Dictionary } from '@/dictionary';
@@ -31,7 +31,7 @@ export class ClassBuilder<T extends Dictionary> {
     }
 
     public injectProperties(): ClassBuilder<T> {
-        this.propertyResolver.resolveAll((property: ResolvedDependency) => {
+        this.propertyResolver.resolveAll((property: Property<any>) => {
             (<T> this.product)[property.name] = property.value;
         });
         return this;
