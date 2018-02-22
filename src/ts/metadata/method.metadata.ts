@@ -16,8 +16,8 @@ export class MethodMetadata<T> {
     }
 
     public decorateTargetMethod(context: MethodMetadata<T>, originalMethod: Function): void {
-        this.descriptor.value = function () {
-            return originalMethod.apply(this, context.resolvedDeps.concat(arguments));
+        this.descriptor.value = function (...args: Array<any>) {
+            return originalMethod.apply(this, context.resolvedDeps.concat(args));
         };
     }
 
