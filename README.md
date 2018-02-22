@@ -158,7 +158,7 @@ const classBuilder = ClassBuilderFactory.create(UserService, container);
 const extraConstructorArguments = [1, 2, 3];
 
 const userService = classBuilder
-  .createInstance(extraConstructorArguments) // .setInstance(instance)
+  .createInstance(extraConstructorArguments) // .setProduct(instance)
   .injectProperties()
   .injectMethods()
   .getProduct()
