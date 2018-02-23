@@ -3,3 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:9-stretch
+    steps:
+      - run: npm i
+      - run: npm run test
