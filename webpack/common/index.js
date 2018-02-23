@@ -1,6 +1,10 @@
 const { LoaderOptionsPlugin } = require('webpack');
+const WebpackTypingsAliasesPlugin = require('webpack-typings-aliases-plugin');
 
-module.exports = (paths) => ({
+module.exports = (paths) => {
+  const aliases = { '@': paths.ts.srcDir };
+
+  return {
     context: paths.ts.srcDir,
     entry: { index: './index' },
 
@@ -14,7 +18,7 @@ module.exports = (paths) => ({
     resolve: {
         modules: ['node_modules'],
         extensions: ['.ts', '.js'],
-        alias: { '@': paths.ts.srcDir }
+        alias: aliases
     },
 
     externals: ['reflect-metadata', 'lazy.js'],
@@ -33,10 +37,16 @@ module.exports = (paths) => ({
     },
 
     plugins: [
+      new WebpackTypingsAliasesPlugin({
+        aliases: aliases,
+        srcDir: paths.ts.srcDir,
+        buildDir: paths.ts.buildDir
+      }),
       new LoaderOptionsPlugin({
           options: {
             tslint: {emitErrors: true, failOnHint: true, typeCheck: true, project: true}
           }
       })
     ]
-});
+  };
+};

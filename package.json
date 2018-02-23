@@ -5,10 +5,9 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "cross-env NODE_ENV='production' npm run webpack && npm run typings",
+    "build": "cross-env NODE_ENV='production' npm run webpack",
     "dev": "cross-env NODE_ENV='development' npm run webpack",
     "test": "cross-env NODE_ENV='test' npm run webpack && npm run mocha",
-    "typings": "node ./typings/index",
     "mocha": "node node_modules/.bin/mocha .tmp/spec/spec.js",
     "webpack": "node node_modules/.bin/webpack --progress --config=./webpack"
   },
@@ -31,7 +30,8 @@
     "tslint": "^5.9.1",
     "tslint-loader": "^3.5.3",
     "webpack": "^3.11.0",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "webpack-typings-aliases-plugin": "0.0.1"
   },
   "dependencies": {
     "@types/lazy.js": "^0.3.28",
