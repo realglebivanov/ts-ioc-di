@@ -15,6 +15,7 @@ module.exports = class TypingsProcessor {
     this.paths.map(path => new AliasProcessor(path, this.aliases))
       .map(processor => processor.load())
       .forEach(processor => processor.write());
+    return this;
   }
 
   cleanUp() {

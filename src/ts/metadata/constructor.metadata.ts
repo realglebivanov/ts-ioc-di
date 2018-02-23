@@ -6,6 +6,6 @@ export class ConstructorMetadata<T> {
     ) { }
 
     public getDependencies(): Array<Dependency<any>> {
-        return this.methodArguments.getMethodOrConstructorDependencies();
+        return this.methodArguments.getMethodOrCtorDependencies();
     }
 }

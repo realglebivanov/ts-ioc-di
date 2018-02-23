@@ -28,7 +28,7 @@ export class ClassMetadata<T> {
     }
 
     public addMethodParameter<D>(method: string, index: number, type: D): void {
-        this.dependencies.addMethodOrConstructorDependency(method, index, type);
+        this.dependencies.addMethodOrCtorDependency(method, index, type);
     }
 
     public addProperty<D>(name: string, type: D): void {

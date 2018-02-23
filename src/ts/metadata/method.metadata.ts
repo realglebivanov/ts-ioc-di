@@ -22,6 +22,6 @@ export class MethodMetadata<T> {
     }
 
     public getDependencies(): Array<Dependency<any>> {
-        return this.methodArguments.getMethodOrConstructorDependencies(this.name);
+        return this.methodArguments.getMethodOrCtorDependencies(this.name);
     }
 }

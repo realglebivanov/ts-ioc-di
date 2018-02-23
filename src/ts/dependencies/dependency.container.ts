@@ -11,11 +11,11 @@ export class DependencyContainer<T> {
         private target: Class<T>
     ) { }
 
-    public addMethodOrConstructorDependency<D>(method: MethodName, argIndex: number, type: D): void {
+    public addMethodOrCtorDependency<D>(method: MethodName, argIndex: number, type: D): void {
         this.overrides.set(method, {...this.getOverridenTypes(method), [argIndex]: type});
     }
 
-    public getMethodOrConstructorDependencies(method?: string): Array<Dependency<any>> {
+    public getMethodOrCtorDependencies(method?: string): Array<Dependency<any>> {
         const realTarget = method ? this.target.prototype : this.target;
         const reflectedTypes = this.getReflectedTypes(realTarget, method);
         const paramTypes = this.getParametersTypes(method, reflectedTypes);
@@ -27,9 +27,13 @@ export class DependencyContainer<T> {
     }
 
     private getParametersTypes(method: MethodName, reflectedTypes: Array<any>): Array<any> {
-        return reflectedTypes.reduce((result: Array<any>, current: any, i: number) => {
-            return [...result, this.getOverridenTypes(method)[i] || current];
+        return reflectedTypes.reduce((types: Array<any>, type: any, index: number) => {
+            return [...types, this.getOverridenType(method, index) || type];
         }, []);
+    }
+
+    private getOverridenType(method: MethodName, index: number): any {
+        return this.getOverridenTypes(method)[index];
     }
 
     private getOverridenTypes(method: MethodName): Dictionary {
