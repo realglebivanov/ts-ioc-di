@@ -3,6 +3,8 @@ jobs:
   build:
     docker:
       - image: circleci/node:9-stretch
+    working_directory: ~/ts-ioc-di
     steps:
+      - checkout
       - run: npm i
-      - run: npm run test
+      - run: npm test
