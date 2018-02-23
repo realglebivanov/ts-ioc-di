@@ -9,7 +9,7 @@
     "dev": "cross-env NODE_ENV='development' npm run webpack",
     "test": "cross-env NODE_ENV='test' npm run webpack && npm run mocha",
     "typings": "node ./typings/index",
-    "mocha": "node node_modules/.bin/mocha .tmp/test/spec.js",
+    "mocha": "node node_modules/.bin/mocha .tmp/spec/spec.js",
     "webpack": "node node_modules/.bin/webpack --progress --config=./webpack"
   },
   "keywords": [
