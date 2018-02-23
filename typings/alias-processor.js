@@ -1,26 +1,23 @@
 const fs = require('fs');
-const { relative, parse } = require('path');
+const ImportLoader = require('./import-loader');
 
 module.exports = class AliasProcessor {
   constructor(path, aliases) {
     this.path = path;
     this.content = fs.readFileSync(path).toString();
-    this.aliases = aliases;
+    this.imports = new ImportLoader(this.path, this.content, aliases).getImports();
   }
 
   load() {
-    for (const alias in this.aliases) {
-      this.content = this.content.replace(this.makeRegexp(alias), this.relativePath(alias));
-    }
+    this.imports.each(statement => this.processImport(statement));
     return this;
   }
 
-  makeRegexp(alias) {
-    return new RegExp(alias, 'g');
-  }
-
-  relativePath(alias) {
-    return relative(parse(this.path).dir, this.aliases[alias]);
+  processImport(statement) {
+    this.content = this.content.replace(
+      statement.getSource(),
+      statement.getReplacement()
+    );
   }
 
   write() {
