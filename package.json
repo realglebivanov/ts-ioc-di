@@ -1,6 +1,6 @@
 {
   "name": "ts-ioc-di",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Typescript IoC container and DI",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -31,7 +31,7 @@
     "tslint-loader": "^3.5.3",
     "webpack": "^3.11.0",
     "webpack-merge": "^4.1.1",
-    "webpack-typings-aliases-plugin": "0.0.1"
+    "webpack-typings-aliases-plugin": "0.0.2"
   },
   "dependencies": {
     "@types/lazy.js": "^0.3.28",
