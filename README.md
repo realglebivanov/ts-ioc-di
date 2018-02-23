@@ -1,5 +1,7 @@
 # ts-ioc-di
 Typescript IoC container and DI
+[![CircleCI](https://circleci.com/gh/glebivanov816/ts-ioc-di/tree/master.svg?style=svg)]
+(https://circleci.com/gh/glebivanov816/ts-ioc-di/tree/master)
 
 # About
 This container can be used to create full graphs of objects using it's features.
