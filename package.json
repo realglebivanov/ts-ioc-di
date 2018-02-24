@@ -23,15 +23,13 @@
     "@types/mocha": "^2.2.48",
     "chai": "^4.1.2",
     "cross-env": "^5.1.3",
-    "delete-empty": "^2.0.0",
-    "glob": "^7.1.2",
     "mocha": "^5.0.1",
     "ts-loader": "^3.5.0",
     "tslint": "^5.9.1",
     "tslint-loader": "^3.5.3",
     "webpack": "^3.11.0",
     "webpack-merge": "^4.1.1",
-    "webpack-typings-aliases-plugin": "^0.0.3"
+    "webpack-typings-aliases-plugin": "0.0.4"
   },
   "dependencies": {
     "@types/lazy.js": "^0.3.28",
