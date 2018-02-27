@@ -1,7 +1,7 @@
 const { LoaderOptionsPlugin } = require('webpack');
 const WebpackTypingsAliasesPlugin = require('webpack-typings-aliases-plugin');
 
-module.exports = (paths) => {
+module.exports = (paths, env) => {
   const aliases = { '@': paths.ts.srcDir };
 
   return {
@@ -32,7 +32,8 @@ module.exports = (paths) => {
       }, {
           test: [/\.ts$/],
           loader: 'ts-loader',
-          include: [paths.ts.srcDir]
+          include: [paths.ts.srcDir],
+          options: { compilerOptions: { declaration: env.isProduction() } }
       }]
     },
 
@@ -44,7 +45,7 @@ module.exports = (paths) => {
       }),
       new LoaderOptionsPlugin({
           options: {
-            tslint: {emitErrors: true, failOnHint: true, typeCheck: true, project: true}
+            tslint: { emitErrors: true, failOnHint: true, typeCheck: true, project: true }
           }
       })
     ]

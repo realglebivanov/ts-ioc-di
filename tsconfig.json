@@ -5,7 +5,6 @@
     "noImplicitThis": false,
     "strict": true,
     "strictNullChecks": true,
-    "declaration": true,
     "noEmitOnError": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,

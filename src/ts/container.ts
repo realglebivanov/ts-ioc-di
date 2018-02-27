@@ -13,7 +13,7 @@ export class Container {
     private bindings: Map<Class<any>, Binding<any>> = new Map();
 
     public flush(): void {
-        this.bindings = new Map();
+        this.bindings.clear();
     }
 
     public resolve<T>(abstract: Class<T>): T {

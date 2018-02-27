@@ -1,6 +1,4 @@
-import { Dictionary } from './dictionary';
-
-export interface Class<T> extends Dictionary {
+export interface Class<T> {
     new(...args: Array<any>): T;
     injectable?: boolean;
 }

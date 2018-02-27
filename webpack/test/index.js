@@ -16,8 +16,7 @@ module.exports = (paths) => ({
       rules: [{
           test: [/\.ts$/],
           loader: 'ts-loader',
-          include: [paths.spec.srcDir],
-          options: { compilerOptions: { declaration: false } }
+          include: [paths.spec.srcDir]
       }]
     }
 });
