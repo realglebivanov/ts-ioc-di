@@ -12,7 +12,9 @@ export class DependencyContainer<T> {
     ) { }
 
     public addMethodOrCtorDependency<D>(method: MethodName, argIndex: number, type: D): void {
-        this.overrides.set(method, {...this.getOverridenTypes(method), [argIndex]: type});
+        this.overrides.set(method, {
+            ...this.getOverridenTypes(method), [argIndex]: type
+        });
     }
 
     public getMethodOrCtorDependencies(method?: string): Array<Dependency<any>> {
@@ -27,9 +29,9 @@ export class DependencyContainer<T> {
     }
 
     private getParametersTypes(method: MethodName, reflectedTypes: Array<any>): Array<any> {
-        return reflectedTypes.reduce((types: Array<any>, type: any, index: number) => {
-            return [...types, this.getOverridenType(method, index) || type];
-        }, []);
+        return reflectedTypes.map((type: any, index: number) =>
+            this.getOverridenType(method, index) || type
+        );
     }
 
     private getOverridenType(method: MethodName, index: number): any {
