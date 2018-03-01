@@ -1,12 +1,9 @@
 import { Class } from '@/class';
 import { Container } from '@/container';
 import { ConstructorMetadata } from '@/metadata';
-import { Dependency } from './dependency';
+import { DependencyResolver } from './dependency.resolver';
 
 export class ConstructorResolver<T> {
-    private extraCtorArgsCounter: number = 0;
-    private extraCtorArgs: Array<any> = [];
-
     public constructor(
         private container: Container,
         private concrete: Class<T>,
@@ -14,19 +11,14 @@ export class ConstructorResolver<T> {
     ) { }
 
     public resolveWith(extraCtorArgs: Array<any>): T {
-        this.extraCtorArgs = extraCtorArgs;
-        return new this.concrete(...this.resolveCtorDependencies());
+        return new this.concrete(...this.resolveCtorDependencies(extraCtorArgs));
     }
 
-    private resolveCtorDependencies(): Array<any> {
-        return this.metadata.getDependencies().map(
-            (dependency: Dependency<any>) => this.resolve(dependency)
-        );
+    private resolveCtorDependencies(extraCtorArgs: Array<any>): Array<any> {
+        return this.getDependencyResolver().combineDepsWith(extraCtorArgs);
     }
 
-    private resolve(dependency: Dependency<any>): any {
-        return dependency.isInjectable() ?
-            this.container.resolve(dependency.getClass()) :
-            this.extraCtorArgs[this.extraCtorArgsCounter++];
+    private getDependencyResolver(): DependencyResolver {
+        return new DependencyResolver(this.container, this.metadata.getDependencies());
     }
 }

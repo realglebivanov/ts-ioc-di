@@ -1,7 +1,7 @@
 import { Container } from '@/container';
 import { MethodMetadata } from '@/metadata';
 
-import { Dependency } from './dependency';
+import { DependencyResolver } from './dependency.resolver';
 
 export class MethodResolver<T> {
     public constructor(
@@ -11,13 +11,11 @@ export class MethodResolver<T> {
 
     public resolveDependencies(): void {
         this.metadata.forEach((method: MethodMetadata<T>) =>
-            method.setResolvedDeps(this.resolveDeps(method))
+            method.setResolver(this.getResolverFor(method))
         );
     }
 
-    private resolveDeps(method: MethodMetadata<T>): Array<any> {
-        return method.getDependencies()
-            .filter((dependency: Dependency<any>) => dependency.isInjectable())
-            .map((dependency: Dependency<any>) => this.container.resolve(dependency.getClass()));
+    private getResolverFor(method: MethodMetadata<T>): DependencyResolver {
+        return new DependencyResolver(this.container, method.getDependencies());
     }
 }
