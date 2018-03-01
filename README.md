@@ -178,13 +178,13 @@ import { Container, Injectable } from 'ts-ioc-di';
   
 const container = new Container();
   
-container.instance(SomeImportantToken, new SomeImportantToken('VALUE'));
+container.instance(SomeImportantToken, 'VALUE');
 ```
 You can use the same trick with, e.g. `Number`
 ```
 @Injectable class VeryImportantNumber extends Number { }
 
-container.instance(VeryImportantNumber, new VeryImportantNumber(Math.random()));
+container.instance(VeryImportantNumber, Math.random());
 ```
 And then you can use these `class-tokens` as dependencies for DI
 ```
