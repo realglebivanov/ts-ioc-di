@@ -172,14 +172,31 @@ This is useful for [integration with libraries](https://github.com/glebivanov816
 ### Primitives
 If you really want to bind a primitive value to container, you have the following option
 ```
-import { Container } from 'container';
+import { Container, Injectable } from 'ts-ioc-di';
   
-class SomeImportantToken extends String { }
+@Injectable class SomeImportantToken extends String { }
   
 const container = new Container();
   
 container.instance(SomeImportantToken, new SomeImportantToken('VALUE'));
 ```
+You can use the same trick with, e.g. `Number`
+```
+@Injectable class VeryImportantNumber extends Number { }
+
+container.instance(VeryImportantNumber, new VeryImportantNumber(Math.random()));
+```
+And then you can use these `class-tokens` as dependencies for DI
+```
+@Injectable
+class Test {
+  public constructor(
+    private token: SomeImportantToken,
+    private number: SomeImportantNumber
+  ) { }
+}
+```
+
 ### Interfaces
 If you want to bind an interface, you can't - there are no interfaces at runtime. 
 ```
