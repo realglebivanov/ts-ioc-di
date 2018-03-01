@@ -168,11 +168,46 @@ const userService = classBuilder
 As you can see, you can build classes with that API without directly resolving them from container.
 This is useful for [integration with libraries](https://github.com/glebivanov816/vue-ts-ioc).
 
-## Pitfalls
-- Primitives are not allowed as bindings keys since Service Locator pattern is discouraged
-- Interfaces are not allowed as bindings keys since they don't have runtime representation
-If you want to use interface, you can use specificated version of decorator with concrete type as its argument or create abstract class with abstract methods only and bind it.
-- Method decorated with `@InjectArgs` can accept regular arguments too, but they will be listed after injected args
+## Extra
+### Primitives
+If you really want to bind a primitive value to container, you have the following option
+```
+import { Container } from 'container';
+  
+class SomeImportantToken extends String { }
+  
+const container = new Container();
+  
+container.instance(SomeImportantToken, new SomeImportantToken('VALUE'));
+```
+### Interfaces
+If you want to bind an interface, you can't - there are no interfaces at runtime. 
+```
+interface Service { }
+class UserService implements Service {}
+
+// Error: Service only refers to a type but is being used as a value here.
+container.bind(Service, UserService);
+```
+You should use abstract classes instead of them.
+```
+abstract class Service { }
+class UserService extends Service {}
+
+// Works!
+container.bind(Service, UserService);
+```
+### Argument injection
+Methods which are decorated with `@InjectArgs` can accept regular arguments too.
+```
+class ViewModel {
+  // otherArg and otherArgs are listed after injected arguments
+  @InjectArgs()
+  public created(handler?: CreatedHandler, otherArg: any, ...otherArgs: Array<any>): void {
+    handler.onEvent(this);
+  }
+}
+```
 
 ## Feedback
 You can fork this repo and make a pull request or request a feature that you would like to see.
