@@ -169,15 +169,34 @@ As you can see, you can build classes with that API without directly resolving t
 This is useful for [integration with libraries](https://github.com/glebivanov816/vue-ts-ioc).
 
 ## Extra
+### Aliases
+If you want to use one class as alias for another - you are welcome.
+```
+import { Container, Injectable } from 'ts-ioc-di';
+
+@Injectable class A { }
+@Injectable class B { }
+@Injectable class C { }
+
+const container = new Container();
+
+// This is how aliases are registered
+container.instance(A, new A());
+container.bind(B, A);
+container.bind(C, B);
+
+// Instance of A which was registered before is resolved
+container.resolve(C);
+```
 ### Primitives
 If you really want to bind a primitive value to container, you have the following option
 ```
 import { Container, Injectable } from 'ts-ioc-di';
-  
+
 @Injectable class SomeImportantToken extends String { }
-  
+
 const container = new Container();
-  
+
 container.instance(SomeImportantToken, 'VALUE');
 ```
 You can use the same trick with, e.g. `Number`
@@ -198,7 +217,7 @@ class Test {
 ```
 
 ### Interfaces
-If you want to bind an interface, you can't - there are no interfaces at runtime. 
+If you want to bind an interface, you can't - there are no interfaces at runtime.
 ```
 interface Service { }
 class UserService implements Service {}
