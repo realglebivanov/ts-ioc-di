@@ -15,6 +15,17 @@ export class ClassBinding<T> implements Binding<T> {
     }
 
     public resolve(container: Container): T {
+        return this.isAlias(container) ?
+            container.resolve(this.concrete) :
+            this.buildClassInstance(container);
+    }
+
+    private isAlias(container: Container) {
+        return this.abstract !== this.concrete
+            && container.isBound(this.concrete);
+    }
+
+    private buildClassInstance(container: Container): T {
         return this.getClassBuilder(container)
             .createInstance(this.extraCtorArgs)
             .injectProperties()

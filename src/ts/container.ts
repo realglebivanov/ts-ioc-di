@@ -16,6 +16,10 @@ export class Container {
         this.bindings.clear();
     }
 
+    public isBound<T>(abstract: Class<T>): boolean {
+        return this.bindings.has(abstract);
+    }
+
     public resolve<T>(abstract: Class<T>): T {
         let foundBinding = this.bindings.get(abstract);
         foundBinding = foundBinding || new ClassBinding(abstract);

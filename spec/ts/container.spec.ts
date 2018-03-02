@@ -1,9 +1,17 @@
 import { expect, assert } from 'chai';
 
 import { Container } from '@/container';
-import { Root, Child, Singleton, Descendant, MockService } from './fixtures';
+import {
+    Root,
+    Child,
+    Singleton,
+    Descendant,
+    MockService,
+    StringToken,
+    AnotherStringToken
+} from './fixtures';
 
-describe(Container.name, function () {
+describe('Container', function () {
     const container: Container = new Container();
 
     beforeEach(() => container.flush());
@@ -59,5 +67,18 @@ describe(Container.name, function () {
         const child: Child = container.resolve(Child);
         assert.instanceOf(child.s1, MockService);
         assert.instanceOf(child.serviceTest(), MockService);
+    });
+
+    it('binds primitives to container', function () {
+        const expected = 'EXPECTED_SUPPORTS_PRIMITIVES';
+        container.instance(StringToken, expected);
+        expect(container.resolve(StringToken)).to.equal(expected);
+    });
+
+    it('bind aliases to container', function () {
+        const expected = 'EXPECTED_SUPPORTS_ALIASES';
+        container.instance(StringToken, expected);
+        container.bind(AnotherStringToken, StringToken);
+        expect(container.resolve(AnotherStringToken)).to.equal(expected);
     });
 });
