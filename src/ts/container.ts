@@ -1,52 +1,65 @@
 import { Class } from './class';
+import { Memento } from './memento';
 
 import {
-    Binding,
-    ValueBinding,
-    SingletonBinding,
-    ClassBinding,
-    Factory,
-    FactoryBinding
+  Binding,
+  ClassBinding,
+  Factory,
+  FactoryBinding,
+  SingletonBinding,
+  ValueBinding
 } from './bindings';
 
 export class Container {
-    private bindings: Map<Class<any>, Binding<any>> = new Map();
+  private bindings: Map<Class<any>, Binding<any>> = new Map();
 
-    public flush(): void {
-        this.bindings.clear();
-    }
+  public unbindAll(): void {
+    this.bindings.clear();
+  }
 
-    public isBound<T>(abstract: Class<T>): boolean {
-        return this.bindings.has(abstract);
-    }
+  public unbind<T>(abstract: Class<T>): void {
+    this.bindings.delete(abstract);
+  }
 
-    public resolve<T>(abstract: Class<T>): T {
-        let foundBinding = this.bindings.get(abstract);
-        foundBinding = foundBinding || new ClassBinding(abstract);
-        return foundBinding.resolve(this);
-    }
+  public isBound<T>(abstract: Class<T>): boolean {
+    return this.bindings.has(abstract);
+  }
 
-    public instance<T, D extends T>(abstract: Class<T>, instance: D): void {
-        this.register(new ValueBinding(abstract, instance));
-    }
+  public save(): Memento {
+    return new Memento(new Map(this.bindings));
+  }
 
-    public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
-        this.register(new SingletonBinding(new ClassBinding(abstract, concrete, args)));
-    }
+  public restore(memento: Memento): void {
+    this.bindings = memento.getState();
+  }
 
-    public singletonFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
-        this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
-    }
+  public resolve<T>(abstract: Class<T>): T {
+    let foundBinding = this.bindings.get(abstract);
+    foundBinding = foundBinding || new ClassBinding(abstract);
+    return foundBinding.resolve(this);
+  }
 
-    public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
-        this.register(new ClassBinding(abstract, concrete, args));
-    }
+  public instance<T, D extends T>(abstract: Class<T>, instance: D): void {
+    this.register(new ValueBinding(abstract, instance));
+  }
 
-    public bindFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
-        this.register(new FactoryBinding(abstract, factory));
-    }
+  public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
+    this.register(new SingletonBinding(new ClassBinding(abstract, concrete, args)));
+  }
 
-    private register<T>(binding: Binding<T>): void {
-        this.bindings.set(binding.getClass(), binding);
-    }
+  public singletonFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
+    this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
+  }
+
+  public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
+    this.register(new ClassBinding(abstract, concrete, args));
+  }
+
+  public bindFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
+    this.register(new FactoryBinding(abstract, factory));
+  }
+
+  private register<T>(binding: Binding<T>): void {
+    this.bindings.set(binding.getClass(), binding);
+  }
 }

@@ -3,23 +3,23 @@ import { ClassMetadata } from './class.metadata';
 import { ClassMetadataFactory } from './class.metadata.factory';
 
 export class MetadataStorage<T> {
-    private metadataKey: symbol = Symbol.for('@@_inject:metadata');
+  private metadataKey: symbol = Symbol.for('@@ts-ioc-di:metadata');
 
-    public constructor(
-        private target: Class<T>
-    ) { }
+  public constructor(
+    private target: Class<T>
+  ) { }
 
-    public getMetadata(): ClassMetadata<T> {
-        return this.fetchMetadata() || this.defineMetadata();
-    }
+  public getMetadata(): ClassMetadata<T> {
+    return this.fetchMetadata() || this.defineMetadata();
+  }
 
-    private fetchMetadata(): ClassMetadata<T> {
-        return Reflect.getOwnMetadata(this.metadataKey, this.target);
-    }
+  private fetchMetadata(): ClassMetadata<T> {
+    return Reflect.getOwnMetadata(this.metadataKey, this.target);
+  }
 
-    private defineMetadata(): ClassMetadata<T> {
-        const newMetadata = ClassMetadataFactory.create(this.target);
-        Reflect.defineMetadata(this.metadataKey, newMetadata, this.target);
-        return newMetadata;
-    }
+  private defineMetadata(): ClassMetadata<T> {
+    const newMetadata = ClassMetadataFactory.create(this.target);
+    Reflect.defineMetadata(this.metadataKey, newMetadata, this.target);
+    return newMetadata;
+  }
 }

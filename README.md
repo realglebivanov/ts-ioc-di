@@ -245,5 +245,22 @@ class ViewModel {
 }
 ```
 
+###Memento
+If you need to manipulate with particular states of container, you can use memento for it.
+```
+const container = new Container();
+
+container.bind(Abstract, Concrete);
+
+// Internal state is saved into memento
+const memento = container.save();
+
+container.unbind(Abstract);
+container.restore(memento);
+
+// Internal  state is restored, so Abstract can be resolved 
+container.resolve(Abstract);
+```
+
 ## Feedback
 You can fork this repo and make a pull request or request a feature that you would like to see.

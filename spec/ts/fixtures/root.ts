@@ -4,15 +4,15 @@ import { Singleton } from './singleton';
 
 @Injectable
 export class Root {
-    public constructor(
-        public child: Child
-    ) { }
+  @Inject(Singleton)
+  public singleton?: Singleton;
 
-    @Inject(Singleton)
-    public singleton?: Singleton;
+  public constructor(
+    public child: Child
+  ) { }
 
-    @InjectArgs()
-    public test(s?: Singleton): Singleton {
-        return s as Singleton;
-    }
+  @InjectArgs()
+  public test(s?: Singleton): Singleton {
+    return s as Singleton;
+  }
 }

@@ -21,7 +21,7 @@ module.exports = (paths, env) => {
         alias: aliases
     },
 
-    externals: ['reflect-metadata', 'lazy.js'],
+    externals: ['reflect-metadata'],
 
     module: {
       rules: [{

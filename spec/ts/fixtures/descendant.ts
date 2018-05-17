@@ -4,6 +4,6 @@ import { Root } from './root';
 
 @Injectable
 export class Descendant extends Root {
-    @Inject()
-    public singleton?: Singleton;
+  @Inject()
+  public singleton?: Singleton;
 }

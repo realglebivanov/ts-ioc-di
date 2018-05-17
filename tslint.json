@@ -12,7 +12,7 @@
             true,
             "check-space"
         ],
-        "indent": [true, "spaces", 4],
+        "indent": [true, "spaces", 2],
         "eofline": true,
         "no-duplicate-variable": true,
         "no-eval": true,
