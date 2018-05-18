@@ -3,14 +3,14 @@ Typescript IoC container and DI
 [![CircleCI](https://circleci.com/gh/glebivanov816/ts-ioc-di.svg?style=svg)](https://circleci.com/gh/glebivanov816/ts-ioc-di)
 
 # About
-This container can be used to create full graphs of objects using it's features.
-Dependencies are resolved recursively and are resolved even if they are not explicitly bound to container.
+This container can be used to create full graphs of objects using its features.
 
 # Features
 - Constructor injection
 - Property injection
 - Method injection
 - Method/constructor argument injection
+- Autowiring
 
 # Dependencies
 - Typescript (DI is implemented with typescript types metadata as a dependency)

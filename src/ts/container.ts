@@ -30,7 +30,7 @@ export class Container {
   }
 
   public restore(memento: Memento): void {
-    this.bindings = memento.getState();
+    this.bindings = new Map(memento.getState());
   }
 
   public resolve<T>(abstract: Class<T>): T {

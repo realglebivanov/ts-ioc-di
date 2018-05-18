@@ -75,7 +75,7 @@ describe('Container', function () {
     expect(container.resolve(StringToken)).to.equal(expected);
   });
 
-  it('bind aliases to container', function () {
+  it('binds aliases to container', function () {
     const expected = 'EXPECTED_SUPPORTS_ALIASES';
     container.instance(StringToken, expected);
     container.bind(AnotherStringToken, StringToken);
