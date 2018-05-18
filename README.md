@@ -245,7 +245,7 @@ class ViewModel {
 }
 ```
 
-###Memento
+### Memento
 If you need to manipulate with particular states of container, you can use memento for it.
 ```
 const container = new Container();
@@ -258,7 +258,7 @@ const memento = container.save();
 container.unbind(Abstract);
 container.restore(memento);
 
-// Internal  state is restored, so Abstract can be resolved 
+// Internal state is restored, so Abstract can be resolved 
 container.resolve(Abstract);
 ```
 
