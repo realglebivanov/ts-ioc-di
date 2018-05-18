@@ -1,7 +1,7 @@
 import { Binding } from './binding';
 import { Class } from '@/class';
 import { Container } from '@/container';
-import { ClassBuilder, ClassBuilderFactory } from '@/builders';
+import { InstanceBuilder, InstanceBuilderFactory } from '@/builders';
 
 export class ClassBinding<T> implements Binding<T> {
   public constructor(
@@ -32,7 +32,7 @@ export class ClassBinding<T> implements Binding<T> {
       .getProduct();
   }
 
-  private getClassBuilder(container: Container): ClassBuilder<T> {
-    return ClassBuilderFactory.create(this.concrete, container);
+  private getClassBuilder(container: Container): InstanceBuilder<T> {
+    return InstanceBuilderFactory.create(this.concrete, container);
   }
 }

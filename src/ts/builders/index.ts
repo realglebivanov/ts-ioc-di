@@ -1,2 +1,2 @@
-export { ClassBuilderFactory } from './class.builder.factory';
-export { ClassBuilder } from './class.builder';
+export { InstanceBuilderFactory } from './instance.builder.factory';
+export { InstanceBuilder } from './instance.builder';

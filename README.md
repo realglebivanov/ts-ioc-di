@@ -142,7 +142,7 @@ class ViewModel {
 ```
 
 ## Low-level API
-Low-level api is represented by `ClassBuilder` and `ClassBuilderFactory` which will return you an instance of `ClassBuilder`.
+Low-level api is represented by `InstanceBuilder` and `InstanceBuilderFactory` which will return you an instance of `InstanceBuilder`.
 
 ```
 import { Container } from 'ts-ioc-di';
@@ -153,12 +153,12 @@ class UserService { }
 
 // ...
 
-import { ClassBuilderFactory } from 'ts-ioc-di';
+import { InstanceBuilderFactory } from 'ts-ioc-di';
 
-const classBuilder = ClassBuilderFactory.create(UserService, container);
+const instanceBuilder = InstanceBuilderFactory.create(UserService, container);
 const extraConstructorArguments = [1, 2, 3];
 
-const userService = classBuilder
+const userService = instanceBuilder
   .createInstance(extraConstructorArguments) // .setProduct(instance)
   .injectProperties()
   .injectMethods()
