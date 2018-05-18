@@ -3,7 +3,7 @@ import { ClassMetadata } from './class.metadata';
 import { ClassMetadataFactory } from './class.metadata.factory';
 
 export class MetadataStorage<T> {
-  private metadataKey: symbol = Symbol.for('@@ts-ioc-di:metadata');
+  private metadataKey: string = '@@ts-ioc-di:metadata';
 
   public constructor(
     private target: Class<T>

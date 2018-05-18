@@ -25,14 +25,14 @@ export class ClassBinding<T> implements Binding<T> {
   }
 
   private buildClassInstance(container: Container): T {
-    return this.getClassBuilder(container)
+    return this.getInstanceBuilder(container)
       .createInstance(this.extraCtorArgs)
       .injectProperties()
       .injectMethods()
       .getProduct();
   }
 
-  private getClassBuilder(container: Container): InstanceBuilder<T> {
+  private getInstanceBuilder(container: Container): InstanceBuilder<T> {
     return InstanceBuilderFactory.create(this.concrete, container);
   }
 }
