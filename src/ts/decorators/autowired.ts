@@ -1,4 +1,4 @@
-import { autowiredBuilder } from './autowired.builder';
+import { autowiredBuilder } from '@/builders';
 
 export const Autowired = autowiredBuilder.getDecorator();
 

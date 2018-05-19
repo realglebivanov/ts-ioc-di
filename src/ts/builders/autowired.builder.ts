@@ -1,6 +1,7 @@
 import { Class } from '@/class';
 import { Container } from '@/container';
-import { ClassBuilder, InstanceBuilderFactory } from '@/builders';
+import { ClassBuilder } from './class.builder';
+import { InstanceBuilderFactory } from './instance.builder.factory';
 
 export type Decorator = (useCtorInjection?: boolean) => <I, C extends Class<I>>(ctor: C) => C;
 
