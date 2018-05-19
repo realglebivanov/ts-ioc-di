@@ -1,6 +1,6 @@
 import { Class } from '@/class';
 
-type ClassWithProperties<T> = Class<T> & {  [key: string]: any; };
+export type ClassWithProperties<T> = Class<T> & { [key: string]: any; };
 
 export class ClassBuilder<T> {
   public constructor(
