@@ -8,7 +8,8 @@ import {
   MockService,
   Root,
   Singleton,
-  StringToken
+  StringToken,
+  AutowiredClass
 } from './fixtures';
 
 describe('Container', function () {
@@ -92,5 +93,12 @@ describe('Container', function () {
 
     container.restore(memento);
     expect(container.resolve(StringToken)).to.equal(expected);
+  });
+
+  it('resolves autowired classes', function () {
+    const autowiredClassInstance = new AutowiredClass();
+    assert.instanceOf(autowiredClassInstance, AutowiredClass);
+    assert.instanceOf(autowiredClassInstance.singleton, Singleton);
+    assert.instanceOf(autowiredClassInstance.singleton2, Singleton);
   });
 });

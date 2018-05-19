@@ -141,6 +141,79 @@ class ViewModel {
 }
 ```
 
+### Autowiring
+
+If you want, you can create classes which dependencies are resolved automatically after regular instantiation
+
+```
+@Autowired()
+class Authenticator {
+  @Inject()
+  private users: UserService;
+}
+
+// UserService is automatically injected
+const authenticator = new Authenticator();
+```
+
+But there are some tricks behind this behavior
+
+#### Autowiring containers setting
+
+By default, autowiring uses last instantiated container to resolve dependencies, but you can ovverride it
+
+```
+import { autowiredBuilder, Container } from 'ts-ioc-di';
+
+// This container instance is used for Autowired to resolve deps
+autowiredBuilder.setDefaultContainer(new Container());
+```
+
+Also, you can use specific containers for corresponding classes
+
+```
+import { autowiredBuilder, Container } from 'ts-ioc-di';
+
+class A { }
+class B { }
+
+// This overrides usage of default container
+autowiredBuilder.setContainer(A, new Container());
+autowiredBuilder.setContainer(B, new Container());
+```
+
+#### Autowiring and constructor injection
+
+You can use any type of DI that is described above, but constructor injection is a bit tricky with autowiring.
+A following mechanism to control it exists.
+
+```
+import { Autowired } from 'ts-ioc-di';
+
+@Autowired(let useConstructorInjection = true)
+class Authenticator {
+  public constructor(
+    private users: UserService,
+    private ...rest: Array<any>
+  ) { }
+}
+```
+In this case constructor injection is enabled and other arguments passed to constructor are in the rest.
+
+```
+import { Autowired } from 'ts-ioc-di';
+
+@Autowired(let useConstructorInjection = false)
+class Authenticator {
+  public constructor(
+    private ...rest: Array<any>
+  ) { }
+}
+```
+In that case arguments passed to constructor are directly forwarded to `Authenticator`.
+
+Default behavior is to not use constructor injection with autowiring, because it may be quite misleading. 
+
 ## Low-level API
 Low-level api is represented by `InstanceBuilder` and `InstanceBuilderFactory` which will return you an instance of `InstanceBuilder`.
 
@@ -166,7 +239,7 @@ const userService = instanceBuilder
 
 ```
 As you can see, you can build classes with that API without directly resolving them from container.
-This is useful for [integration with libraries](https://github.com/glebivanov816/vue-ts-ioc).
+This may be useful for [integration with libraries](https://npmjs.com/package/vue-ts-ioc) or writing your own decorators to extend DI possibilities.
 
 ## Extra
 ### Aliases
@@ -205,7 +278,7 @@ You can use the same trick with, e.g. `Number`
 
 container.instance(VeryImportantNumber, Math.random());
 ```
-And then you can use these `class-tokens` as dependencies for DI
+And then you can use these classes as dependencies for DI
 ```
 @Injectable
 class Test {
@@ -261,6 +334,3 @@ container.restore(memento);
 // Internal state is restored, so Abstract can be resolved 
 container.resolve(Abstract);
 ```
-
-## Feedback
-You can fork this repo and make a pull request or request a feature that you would like to see.

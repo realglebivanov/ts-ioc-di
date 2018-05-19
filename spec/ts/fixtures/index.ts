@@ -6,3 +6,4 @@ export { Service } from './service';
 export { MockService } from './mock.service';
 export { StringToken } from './string.token';
 export { AnotherStringToken } from './another.string.token';
+export { AutowiredClass } from './autowired-class';

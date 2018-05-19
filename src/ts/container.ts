@@ -1,5 +1,6 @@
 import { Class } from './class';
 import { Memento } from './memento';
+import { autowiredBuilder } from '@/decorators';
 
 import {
   Binding,
@@ -12,6 +13,10 @@ import {
 
 export class Container {
   private bindings: Map<Class<any>, Binding<any>> = new Map();
+
+  public constructor() {
+    autowiredBuilder.setDefaultContainer(this);
+  }
 
   public unbindAll(): void {
     this.bindings.clear();
