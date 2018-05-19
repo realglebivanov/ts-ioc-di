@@ -1,6 +1,6 @@
 import { Class } from './class';
 import { Memento } from './memento';
-import { autowiredBuilder } from '@/decorators';
+import { autowiredBuilder } from './decorators';
 
 import {
   Binding,

@@ -239,7 +239,7 @@ const userService = instanceBuilder
 
 ```
 As you can see, you can build classes with that API without directly resolving them from container.
-This may be useful for [integration with libraries](https://npmjs.com/package/vue-ts-ioc) or writing your own decorators to extend DI possibilities.
+This may be useful for integration with libraries or writing your own decorators to extend DI possibilities.
 
 ## Extra
 ### Aliases
