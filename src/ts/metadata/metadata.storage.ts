@@ -3,8 +3,6 @@ import { ClassMetadata } from './class.metadata';
 import { ClassMetadataFactory } from './class.metadata.factory';
 
 export class MetadataStorage<T> {
-  private metadataKey: string = '@@ts-ioc-di:metadata';
-
   public constructor(
     private target: Class<T>
   ) { }
@@ -13,13 +11,13 @@ export class MetadataStorage<T> {
     return this.fetchMetadata() || this.defineMetadata();
   }
 
-  private fetchMetadata(): ClassMetadata<T> {
-    return Reflect.getOwnMetadata(this.metadataKey, this.target);
+  private fetchMetadata(): ClassMetadata<T> | undefined {
+    return this.target.___inject_metadata;
   }
 
   private defineMetadata(): ClassMetadata<T> {
     const newMetadata = ClassMetadataFactory.create(this.target);
-    Reflect.defineMetadata(this.metadataKey, newMetadata, this.target);
+    this.target.___inject_metadata = newMetadata;
     return newMetadata;
   }
 }

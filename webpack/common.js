@@ -7,6 +7,7 @@ module.exports = (paths, env) => {
   return {
     context: paths.ts.srcDir,
     entry: { index: './index' },
+    mode: env.mode,
 
     output: {
         path: paths.ts.buildDir,
@@ -21,7 +22,7 @@ module.exports = (paths, env) => {
         alias: aliases
     },
 
-    externals: ['reflect-metadata'],
+    externals: ['reflect-metadata', 'tslib'],
 
     module: {
       rules: [{
@@ -33,7 +34,7 @@ module.exports = (paths, env) => {
           test: [/\.ts$/],
           loader: 'ts-loader',
           include: [paths.ts.srcDir],
-          options: { compilerOptions: { declaration: env.isProduction() } }
+          options: { compilerOptions: { declaration: env.is('production') } }
       }]
     },
 

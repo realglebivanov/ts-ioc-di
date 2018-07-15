@@ -63,6 +63,6 @@
             "check-typecast",
             "check-preblock"
         ],
-        "max-classes-per-file": [true, 1]
+        "max-classes-per-file": [true, 1, "exclude-class-expressions"]
     }
 }

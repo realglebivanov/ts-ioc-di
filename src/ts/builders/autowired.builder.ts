@@ -1,47 +1,25 @@
 import { Class } from '@/class';
 import { Container } from '@/container';
-import { ClassBuilder } from './class.builder';
-import { InstanceBuilderFactory } from './instance.builder.factory';
+import { ClassBuilder, ClassBuilderConfig } from './class.builder';
 
-export type Decorator = (useCtorInjection?: boolean) => <I, C extends Class<I>>(ctor: C) => C;
+export type DecoratorFactory = (container: Container) => Decorator;
+export type DecoratorConfig = { useCtorInjection?: boolean };
+export type Decorator = (config?: DecoratorConfig) => <I, C extends Class<I>>(ctor: C) => C;
 
 export class AutowiredBuilder {
-  private containers: Map<Class<any>, Container> = new Map();
-  private defaultContainer?: Container;
-
-  public setContainer<I, C extends Class<I>>(ctor: C, container: Container): void {
-    this.containers.set(ctor, container);
-  }
-
-  public setDefaultContainer(container: Container): void {
-    this.defaultContainer = container;
-  }
-
-  public getDecorator<I, C extends Class<I>>(): Decorator {
+  public getDecoratorFactory(): DecoratorFactory {
     return (
-      (useCtorInjection: boolean = false) =>
-        (ctor: C) =>
-          this.createClassProxy(ctor, useCtorInjection)
-    ) as Decorator;
+      (container: Container) =>
+        ({ useCtorInjection = false }: DecoratorConfig = { useCtorInjection: false }) =>
+          <I, C extends Class<I>>(ctor: C) => this.createClassProxy({ ctor, container, useCtorInjection })
+    ) as DecoratorFactory;
   }
 
-  private createClassProxy<I, C extends Class<I>>(ctor: C, useCtorInjection: boolean): C {
-    const newClass: any = (...args: Array<any>) => this.createClassInstance(ctor, args, useCtorInjection);
-    new ClassBuilder(newClass).copyPrototype(ctor).copyStaticProperties(ctor);
-    return newClass as C;
-  }
-
-  private createClassInstance<I, C extends Class<I>>(ctor: C, args: Array<any>, useCtorInjection: boolean): I {
-    const instanceBuilder = InstanceBuilderFactory.create(ctor, this.containerFor(ctor)).injectMethods();
-    useCtorInjection ? instanceBuilder.createInstance(args) : instanceBuilder.setProduct(new ctor(...args));
-    return instanceBuilder.injectProperties().getProduct();
-  }
-
-  private containerFor<T>(ctor: Class<T>): Container {
-    const container = this.containers.get(ctor) || this.defaultContainer;
-    if (container === undefined) throw new Error('Cannot resolve class without container instance');
-    return container;
+  private createClassProxy<I, C extends Class<I>>(config: ClassBuilderConfig<C>): C {
+    return new ClassBuilder(config)
+      .copyPrototype()
+      .copyReflectMetadata()
+      .copyStaticProperties()
+      .getNewClass();
   }
 }
-
-export const autowiredBuilder = new AutowiredBuilder();

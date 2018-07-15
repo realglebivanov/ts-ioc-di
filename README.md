@@ -13,10 +13,21 @@ This container can be used to create full graphs of objects using its features.
 - Autowiring
 
 # Dependencies
-- Typescript (DI is implemented with typescript types metadata as a dependency)
+- Typescript
 - Reflect-metadata
 
 # Examples
+## tsconfig.json setup
+You have to add the following lines to you tsconfig.json
+```
+    {
+        ...,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        ...
+    }
+```
+
 ## Initialization and bindings
 ```
 import { Container } from 'ts-ioc-di';
@@ -146,6 +157,13 @@ class ViewModel {
 If you want, you can create classes which dependencies are resolved automatically after regular instantiation
 
 ```
+import { Container, createAutowiredDecorator } from 'ts-ioc-di';
+
+const container = new Container();
+const Autowired = createAutowiredDecorator(container);
+
+// ...
+
 @Autowired()
 class Authenticator {
   @Inject()
@@ -156,41 +174,13 @@ class Authenticator {
 const authenticator = new Authenticator();
 ```
 
-But there are some tricks behind this behavior
-
-#### Autowiring containers setting
-
-By default, autowiring uses last instantiated container to resolve dependencies, but you can ovverride it
-
-```
-import { autowiredBuilder, Container } from 'ts-ioc-di';
-
-// This container instance is used for Autowired to resolve deps
-autowiredBuilder.setDefaultContainer(new Container());
-```
-
-Also, you can use specific containers for corresponding classes
-
-```
-import { autowiredBuilder, Container } from 'ts-ioc-di';
-
-class A { }
-class B { }
-
-// This overrides usage of default container
-autowiredBuilder.setContainer(A, new Container());
-autowiredBuilder.setContainer(B, new Container());
-```
-
 #### Autowiring and constructor injection
 
 You can use any type of DI that is described above, but constructor injection is a bit tricky with autowiring.
 A following mechanism to control it exists.
 
 ```
-import { Autowired } from 'ts-ioc-di';
-
-@Autowired(let useConstructorInjection = true)
+@Autowired({ useConstructorInjection: true })
 class Authenticator {
   public constructor(
     private users: UserService,
@@ -201,16 +191,21 @@ class Authenticator {
 In this case constructor injection is enabled and other arguments passed to constructor are in the rest.
 
 ```
-import { Autowired } from 'ts-ioc-di';
+@Autowired({ useConstructorInjection: false })
+class Authenticator {
+  public constructor(
+    private ...rest: Array<any>
+  ) { }
+}
 
-@Autowired(let useConstructorInjection = false)
+@Autowired()
 class Authenticator {
   public constructor(
     private ...rest: Array<any>
   ) { }
 }
 ```
-In that case arguments passed to constructor are directly forwarded to `Authenticator`.
+In these cases arguments passed to constructor are directly forwarded to `Authenticator`.
 
 Default behavior is to not use constructor injection with autowiring, because it may be quite misleading. 
 

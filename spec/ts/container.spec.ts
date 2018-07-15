@@ -9,12 +9,11 @@ import {
   Root,
   Singleton,
   StringToken,
-  AutowiredClass
+  AutowiredClass,
+  container
 } from './fixtures';
 
 describe('Container', function () {
-  const container: Container = new Container();
-
   beforeEach(() => container.unbindAll());
 
   it('resolves not bound classes', function () {
@@ -97,6 +96,8 @@ describe('Container', function () {
 
   it('resolves autowired classes', function () {
     const autowiredClassInstance = new AutowiredClass();
+    assert.isTrue(Reflect.getMetadata('works', AutowiredClass.prototype, 'test'));
+    assert.isFalse(Reflect.getMetadata('doesntWork', AutowiredClass, 'test'));
     assert.instanceOf(autowiredClassInstance, AutowiredClass);
     assert.instanceOf(autowiredClassInstance.singleton, Singleton);
     assert.instanceOf(autowiredClassInstance.singleton2, Singleton);

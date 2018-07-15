@@ -1,21 +1,17 @@
 module.exports = class Env {
-  isProduction() {
-    return this.is('production');
-  }
-
-  isDevelopment() {
-    return this.is('development');
-  }
-
-  isTest() {
-    return this.is('test');
+  constructor(givenName) {
+    this.givenName = givenName;
   }
 
   is(name) {
-    return this.getName() === name;
+    return this.name === name;
   }
 
-  getName() {
-    return process.env.NODE_ENV || 'development';
+  get mode() {
+    return this.is('production') || this.is('development') ? this.name : 'none';
+  }
+
+  get name() {
+    return this.givenName;
   }
 }

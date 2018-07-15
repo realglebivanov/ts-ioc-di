@@ -6,6 +6,8 @@
     "strict": true,
     "strictNullChecks": true,
     "noEmitOnError": true,
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

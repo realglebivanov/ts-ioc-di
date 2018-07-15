@@ -1,3 +1,3 @@
-import { autowiredBuilder, Decorator } from '@/builders';
+import { AutowiredBuilder, DecoratorFactory } from '@/builders';
 
-export const Autowired: Decorator = autowiredBuilder.getDecorator();
+export const createAutowiredDecorator: DecoratorFactory = new AutowiredBuilder().getDecoratorFactory();
