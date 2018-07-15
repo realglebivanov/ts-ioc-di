@@ -1,6 +1,6 @@
 {
   "name": "ts-ioc-di",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Typescript IoC container and DI",
   "main": "build/index.js",
   "types": "build/index.d.ts",

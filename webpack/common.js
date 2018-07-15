@@ -13,6 +13,8 @@ module.exports = (paths, env) => {
         path: paths.ts.buildDir,
         filename: '[name].js',
         libraryTarget: 'umd',
+        library: 'TsIocDi',
+        globalObject: "typeof self !== 'undefined' ? self : this",
         umdNamedDefine: true
     },
 
