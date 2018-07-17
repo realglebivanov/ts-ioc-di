@@ -1,6 +1,6 @@
 import { Binding } from './binding';
 import { Container } from '@/container';
-import { Class } from '@/class';
+import { Token } from '@/token';
 
 export class SingletonBinding<T> implements Binding<T> {
   private resolved: T | null = null;
@@ -9,8 +9,8 @@ export class SingletonBinding<T> implements Binding<T> {
     private binding: Binding<T>
   ) { }
 
-  public getClass(): Class<T> {
-    return this.binding.getClass();
+  public getToken(): Token<T> {
+    return this.binding.getToken();
   }
 
   public resolve(container: Container): T {

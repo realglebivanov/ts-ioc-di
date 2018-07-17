@@ -2,9 +2,6 @@
 Typescript IoC container and DI
 [![CircleCI](https://circleci.com/gh/glebivanov816/ts-ioc-di.svg?style=svg)](https://circleci.com/gh/glebivanov816/ts-ioc-di)
 
-# About
-This container can be used to create full graphs of objects using its features.
-
 # Features
 - Constructor injection
 - Property injection
@@ -36,6 +33,8 @@ const container = new Container();
 
 // binds Concrete to container
 container.bind(Concrete);
+container.bind('concrete', Concrete);
+container.bind(Symbol.for('concrete'), Concrete);
 
 // binds Abstract class to its implementation
 container.bind(Abstract, Concrete);
@@ -45,9 +44,13 @@ container.bind(Abstract, Concrete, [1, 10]);
 
 // binds factory for resolving Abstract
 container.bindFactory(Abstract, (container: Container) => container.resolve(Concrete));
+container.bindFactory('abstract', (container: Container) => container.resolve(Concrete));
+container.bindFactory(Symbol.for('abstract'), (container: Container) => container.resolve(Concrete));
 
 // binds Concrete as singleton
 container.singleton(Concrete);
+container.singleton('concrete', Concrete);
+container.singleton(Symbol.for('concrete'), Concrete);
 
 // binds Concrete as singleton implementation of Abstract
 container.singleton(Abstract, Concrete);
@@ -57,9 +60,32 @@ container.singleton(Abstract, Concrete, [1, 2]);
 
 // binds factory of Concrete as singleton implementation of Abstract
 container.singletonFactory(Abstract, (container: Container) => container.resolve(Concrete));
+container.singletonFactory('abstract', (container: Container) => container.resolve(Concrete));
+container.singletonFactory(Symbol.for('abstract'), (container: Container) => container.resolve(Concrete));
 
 // binds instance as implementation of Abstract
 container.instance(Abstract, container.resolve(Concrete));
+container.instance('abstract', container.resolve(Concrete));
+container.instance(Symbol.for('abstract'), container.resolve(Concrete));
+```
+
+## Dependency resolution
+You must register all your dependencies before trying to resolve them with DI.
+Otherwise `ResolutionError` will be raised.
+
+If you are using primitives to bind dependencies to container, container can't infer 
+resolved dependency type, so you have to pass type of resolved dependency as type argument.
+
+```
+import { Container, Injectable } from 'ts-ioc-di';
+
+@Injectable class Test { }
+
+// ...
+
+const container = new Container();
+container.bind('test', Test);
+container.resolve<Test>('test');
 ```
 
 ## Dependency injection
@@ -257,7 +283,11 @@ container.bind(C, B);
 container.resolve(C);
 ```
 ### Primitives
-If you really want to bind a primitive value to container, you have the following option
+
+Strings and symbols are allowed as DI tokens, 
+but their usage is not preferred since DI container should not be used as service locator.  
+
+Another option is
 ```
 import { Container, Injectable } from 'ts-ioc-di';
 

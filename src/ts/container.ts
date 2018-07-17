@@ -1,5 +1,7 @@
 import { Class } from './class';
+import { Token } from './token';
 import { Memento } from './memento';
+import { ResolutionError } from './errors';
 
 import {
   Binding,
@@ -10,18 +12,20 @@ import {
   ValueBinding
 } from './bindings';
 
+export type State = Map<Token<any>, Binding<any>>;
+
 export class Container {
-  private bindings: Map<Class<any>, Binding<any>> = new Map();
+  private bindings: State = new Map();
 
   public unbindAll(): void {
     this.bindings.clear();
   }
 
-  public unbind<T>(abstract: Class<T>): void {
+  public unbind<T>(abstract: Token<T>): void {
     this.bindings.delete(abstract);
   }
 
-  public isBound<T>(abstract: Class<T>): boolean {
+  public isBound<T>(abstract: Token<T>): boolean {
     return this.bindings.has(abstract);
   }
 
@@ -33,33 +37,43 @@ export class Container {
     this.bindings = new Map(memento.getState());
   }
 
-  public resolve<T>(abstract: Class<T>): T {
-    let foundBinding = this.bindings.get(abstract);
-    foundBinding = foundBinding || new ClassBinding(abstract);
+  public resolve<T>(abstract: Token<T>): T {
+    const foundBinding = this.bindings.get(abstract);
+    if (foundBinding === undefined) throw new ResolutionError(abstract);
     return foundBinding.resolve(this);
   }
 
-  public instance<T, D extends T>(abstract: Class<T>, instance: D): void {
+  public instance<T, D extends T>(abstract: Token<T>, instance: D): void {
     this.register(new ValueBinding(abstract, instance));
   }
 
-  public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
-    this.register(new SingletonBinding(new ClassBinding(abstract, concrete, args)));
-  }
-
-  public singletonFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
-    this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
-  }
-
-  public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void {
-    this.register(new ClassBinding(abstract, concrete, args));
-  }
-
-  public bindFactory<T, D extends T>(abstract: Class<T>, factory: Factory<D>): void {
+  public bindFactory<T, D extends T>(abstract: Token<T>, factory: Factory<D>): void {
     this.register(new FactoryBinding(abstract, factory));
   }
 
+  public singletonFactory<T, D extends T>(abstract: Token<T>, factory: Factory<D>): void {
+    this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
+  }
+
+  public bind<D>(abstract: string, concrete: D, args?: Array<any>): void;
+  public bind<D>(abstract: symbol, concrete: D, args?: Array<any>): void;
+  public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void;
+  public bind<T, D extends T>(abstract: Token<T>, concrete?: Class<D>, args?: Array<any>): void {
+    const realConcrete = concrete || abstract as Class<D>;
+    const classBinding = new ClassBinding(abstract, realConcrete, args);
+    this.register(classBinding);
+  }
+
+  public singleton<D>(abstract: string, concrete: D, args?: Array<any>): void;
+  public singleton<D>(abstract: symbol, concrete: D, args?: Array<any>): void;
+  public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void;
+  public singleton<T, D extends T>(abstract: Token<T>, concrete: Class<D>, args?: Array<any>): void {
+    const realConcrete = concrete || abstract as Class<D>;
+    const classBinding = new ClassBinding(abstract, realConcrete, args);
+    this.register(new SingletonBinding(classBinding));
+  }
+
   private register<T>(binding: Binding<T>): void {
-    this.bindings.set(binding.getClass(), binding);
+    this.bindings.set(binding.getToken(), binding);
   }
 }

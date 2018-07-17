@@ -1,14 +1,14 @@
 import { Binding } from './binding';
 import { Container } from '@/container';
-import { Class } from '@/class';
+import { Token } from '@/token';
 
 export class ValueBinding<T> implements Binding<T> {
   public constructor(
-    private abstract: Class<T>,
+    private abstract: Token<T>,
     private value: T
   ) { }
 
-  public getClass(): Class<T> {
+  public getToken(): Token<T> {
     return this.abstract;
   }
 

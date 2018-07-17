@@ -2,22 +2,25 @@ import { Binding } from './binding';
 import { Class } from '@/class';
 import { Container } from '@/container';
 import { InstanceBuilder, InstanceBuilderFactory } from '@/builders';
+import { Token } from '@/token';
 
 export class ClassBinding<T> implements Binding<T> {
   public constructor(
-    private abstract: Class<T>,
-    private concrete: Class<T> = abstract,
+    private abstract: Token<T>,
+    private concrete: Class<T>,
     private extraCtorArgs: Array<any> = []
   ) { }
 
-  public getClass(): Class<T> {
+  public getToken(): Token<T> {
     return this.abstract;
   }
 
   public resolve(container: Container): T {
-    return this.isAlias(container) ?
-      container.resolve(this.concrete) :
-      this.buildClassInstance(container);
+    if (this.isAlias(container)) {
+      return container.resolve(this.concrete);
+    } else {
+      return this.buildClassInstance(container);
+    }
   }
 
   private isAlias(container: Container) {

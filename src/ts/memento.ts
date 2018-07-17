@@ -1,7 +1,4 @@
-import { Binding } from './bindings';
-import { Class } from './class';
-
-export type State = Map<Class<any>, Binding<any>>;
+import { State } from './container';
 
 export class Memento {
   public constructor(
