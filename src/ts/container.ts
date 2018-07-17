@@ -1,11 +1,12 @@
 import { Class } from './class';
 import { Token } from './token';
 import { Memento } from './memento';
-import { ResolutionError } from './errors';
+import { UnknownDependencyError } from './errors';
 
 import {
   Binding,
   ClassBinding,
+  AliasBinding,
   Factory,
   FactoryBinding,
   SingletonBinding,
@@ -43,7 +44,14 @@ export class Container {
     if (abstract instanceof Function) {
       return new ClassBinding(abstract, abstract as Class<T>).resolve(this);
     }
-    throw new ResolutionError(abstract);
+    throw new UnknownDependencyError(abstract);
+  }
+
+  public alias<T, D extends T>(abstract: Token<T>, concrete: Token<D>): void {
+    if (!this.isBound(concrete)) {
+      throw new UnknownDependencyError(concrete);
+    }
+    this.register(new AliasBinding(abstract, concrete));
   }
 
   public instance<T, D extends T>(abstract: Token<T>, instance: D): void {
@@ -58,22 +66,16 @@ export class Container {
     this.register(new SingletonBinding(new FactoryBinding(abstract, factory)));
   }
 
-  public bind<D>(abstract: string, concrete: D, args?: Array<any>): void;
-  public bind<D>(abstract: symbol, concrete: D, args?: Array<any>): void;
-  public bind<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void;
+  public bind<T>(concrete: Class<T>): void;
+  public bind<T, D extends T>(abstract: Token<T>, concrete: Class<D>, args?: Array<any>): void;
   public bind<T, D extends T>(abstract: Token<T>, concrete?: Class<D>, args?: Array<any>): void {
-    const realConcrete = concrete || abstract as Class<D>;
-    const classBinding = new ClassBinding(abstract, realConcrete, args);
-    this.register(classBinding);
+    this.register(new ClassBinding(abstract, concrete || abstract as Class<D>, args));
   }
 
-  public singleton<D>(abstract: string, concrete: D, args?: Array<any>): void;
-  public singleton<D>(abstract: symbol, concrete: D, args?: Array<any>): void;
-  public singleton<T, D extends T>(abstract: Class<T>, concrete?: Class<D>, args?: Array<any>): void;
-  public singleton<T, D extends T>(abstract: Token<T>, concrete: Class<D>, args?: Array<any>): void {
-    const realConcrete = concrete || abstract as Class<D>;
-    const classBinding = new ClassBinding(abstract, realConcrete, args);
-    this.register(new SingletonBinding(classBinding));
+  public singleton<T>(concrete: Class<T>): void;
+  public singleton<T, D extends T>(abstract: Token<T>, concrete: Class<D>, args?: Array<any>): void;
+  public singleton<T, D extends T>(abstract: Token<T>, concrete?: Class<D>, args?: Array<any>): void {
+    this.register(new SingletonBinding(new ClassBinding(abstract, concrete || abstract as Class<D>, args)));
   }
 
   private register<T>(binding: Binding<T>): void {

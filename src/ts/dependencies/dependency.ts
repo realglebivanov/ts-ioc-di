@@ -1,13 +1,14 @@
-import { Class } from '@/class';
+import { Token } from '@/token';
+import { AbstractClass } from '@/abstract.class';
 
 export class Dependency<T> {
   public constructor(
-    private type: Class<T>,
+    private token: Token<T>,
     private name?: string
   ) { }
 
-  public getClass(): Class<T> {
-    return this.type;
+  public getToken(): Token<T> {
+    return this.token;
   }
 
   public getName(): string {
@@ -15,6 +16,8 @@ export class Dependency<T> {
   }
 
   public isInjectable(): boolean {
-    return Boolean(this.type && this.type.injectable);
+    return this.token instanceof Function ?
+      Boolean((this.token as AbstractClass<T>).injectable) :
+      Boolean(this.token);
   }
 }

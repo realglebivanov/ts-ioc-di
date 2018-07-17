@@ -3,6 +3,7 @@ import { ConstructorResolver, MethodResolver, PropertyResolver } from '@/depende
 import { Class } from '@/class';
 import { Container } from '@/container';
 import { MetadataStorage } from './metadata.storage';
+import { Token } from '@/token';
 
 export class MetadataProxy<T> {
   private metadata = new MetadataStorage(this.target).getMetadata();
@@ -31,7 +32,7 @@ export class MetadataProxy<T> {
     this.metadata.addMethod(name, descriptor);
   }
 
-  public addProperty<D>(name: string, type: D): void {
+  public addProperty<D>(name: string, type?: Token<D>): void {
     this.metadata.addProperty(name, type);
   }
 }

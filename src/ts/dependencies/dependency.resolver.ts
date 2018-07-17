@@ -24,7 +24,7 @@ export class DependencyResolver {
 
   private resolve(dependency: Dependency<any>, extraArgs: Array<any>): any {
     return dependency.isInjectable() ?
-      this.container.resolve(dependency.getClass()) :
+      this.container.resolve(dependency.getToken()) :
       extraArgs[this.extraArgsIndex++];
   }
 }

@@ -7,4 +7,5 @@ export { MockService } from './mock.service';
 export { StringToken } from './string.token';
 export { AnotherStringToken } from './another.string.token';
 export { AutowiredClass } from './autowired-class';
+export { PrimitiveTest } from './primitive-test';
 export { container } from './container';

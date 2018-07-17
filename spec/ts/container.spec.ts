@@ -10,6 +10,7 @@ import {
   Singleton,
   StringToken,
   AutowiredClass,
+  PrimitiveTest,
   container
 } from './fixtures';
 
@@ -84,7 +85,7 @@ describe('Container', function () {
   it('binds aliases to container', function () {
     const expected = 'EXPECTED_SUPPORTS_ALIASES';
     container.instance(StringToken, expected);
-    container.bind(AnotherStringToken, StringToken);
+    container.alias(AnotherStringToken, StringToken);
     expect(container.resolve(AnotherStringToken)).to.equal(expected);
   });
 
@@ -107,5 +108,19 @@ describe('Container', function () {
     assert.instanceOf(autowiredClassInstance, AutowiredClass);
     assert.instanceOf(autowiredClassInstance.singleton, Singleton);
     assert.instanceOf(autowiredClassInstance.singleton2, Singleton);
+  });
+
+  it('resolves dependencies bound with primitives', function () {
+    container.instance('test', container.resolve(Root));
+    container.alias(Symbol.for('test'), 'test');
+    assert.instanceOf(container.resolve<Root>('test'), Root);
+    assert.instanceOf(container.resolve<Root>(Symbol.for('test')), Root);
+  });
+
+  it('resolves dependencies bound with primitives using decorators', function () {
+    container.singleton('singleton', Singleton);
+    const primitiveTest = container.resolve(PrimitiveTest);
+    assert.instanceOf(primitiveTest.s1, Singleton);
+    expect(primitiveTest.s1).to.equal(primitiveTest.s2);
   });
 });

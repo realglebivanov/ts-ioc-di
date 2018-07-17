@@ -1,1 +1,1 @@
-export { ResolutionError } from './resolution.error';
+export { UnknownDependencyError } from './unknown-dependency.error';

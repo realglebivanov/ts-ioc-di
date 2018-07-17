@@ -4,6 +4,7 @@ import { DependencyContainer } from '@/dependencies';
 import { ConstructorMetadata } from './constructor.metadata';
 import { PropertyMetadata } from './property.metadata';
 import { MethodMetadata } from './method.metadata';
+import { Token } from '@/token';
 
 export class ClassMetadata<T> {
   private properties: Map<string, PropertyMetadata<T, any>> = new Map();
@@ -31,7 +32,7 @@ export class ClassMetadata<T> {
     this.dependencies.addMethodOrCtorDependency(method, index, type);
   }
 
-  public addProperty<D>(name: string, type: D): void {
+  public addProperty<D>(name: string, type?: Token<D>): void {
     this.properties.set(name, new PropertyMetadata(name, this.classConstructor.prototype, type));
   }
 

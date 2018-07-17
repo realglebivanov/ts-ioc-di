@@ -23,7 +23,7 @@ export class PropertyResolver<T> {
   private resolve<D>(dependency: Dependency<D>): Property<D> {
     return {
       name: dependency.getName(),
-      value: this.container.resolve(dependency.getClass())
+      value: this.container.resolve(dependency.getToken())
     };
   }
 }

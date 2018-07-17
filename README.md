@@ -72,7 +72,7 @@ container.instance(Symbol.for('abstract'), container.resolve(Concrete));
 ## Dependency resolution
 You should register all your dependencies before trying to resolve them with DI.
 Otherwise container will try to resolve unregistered dependency 
-and if it won't be injectable `ResolutionError` will be thrown.
+and if it won't be injectable `UnknownDependencyError` will be thrown.
 
 If you are using primitives to bind dependencies to container, container can't infer 
 resolved dependency type, so you have to pass type of resolved dependency as type argument.
@@ -277,8 +277,8 @@ const container = new Container();
 
 // This is how aliases are registered
 container.instance(A, new A());
-container.bind(B, A);
-container.bind(C, B);
+container.alias(B, A);
+container.alias(C, B);
 
 // Instance of A which was registered before is resolved
 container.resolve(C);

@@ -1,17 +1,18 @@
 import { Dependency } from '@/dependencies';
+import { Token } from '@/token';
 
 export class PropertyMetadata<T, D> {
   public constructor(
     private name: string,
     private target: T,
-    private type: D
+    private type?: Token<D>
   ) { }
 
-  public getDependency(): Dependency<any> {
+  public getDependency(): Dependency<D> {
     return new Dependency(this.getType(), this.name);
   }
 
-  private getType(): any {
+  private getType(): Token<D> {
     return this.type || Reflect.getMetadata('design:type', this.target, this.name);
   }
 }
