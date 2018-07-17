@@ -16,17 +16,22 @@ import {
 describe('Container', function () {
   beforeEach(() => container.unbindAll());
 
-  it('doesnt resolve not bound classes', function () {
-    expect(() => container.resolve(Root))
+  it('doesnt resolve not bound primitives', function () {
+    expect(() => container.resolve('RandomString'))
       .to.throw(Error)
-      .with.property('token', Root);
+      .with.property('token', 'RandomString');
+  });
+
+  it('resolves not bound classes', function () {
+    const root: Root = container.resolve(Root);
+    assert.instanceOf(root, Root);
+    assert.instanceOf(root.child, Child);
+    assert.instanceOf(root.child.singleton, Singleton);
+    assert.instanceOf(root.singleton, Singleton);
   });
 
   it('binds singletons', function () {
-    container.bind(Root);
-    container.bind(Child);
     container.singleton(Singleton);
-    container.bind(MockService);
     const root: Root = container.resolve(Root);
     const anotherRoot: Root = container.resolve(Root);
     expect(root.singleton).to.equal(anotherRoot.singleton);
@@ -34,19 +39,12 @@ describe('Container', function () {
 
   it('binds abstracts to concretes', function () {
     container.bind(Root, Descendant);
-    container.bind(Child);
-    container.singleton(Singleton);
-    container.bind(MockService);
     const root: Root = container.resolve(Root);
     assert.instanceOf(root, Descendant);
   });
 
   it('binds factories', function () {
     container.bindFactory(Root, (container: Container) => container.resolve(Descendant));
-    container.bind(Child);
-    container.bind(MockService);
-    container.bind(Descendant);
-    container.singleton(Singleton);
     const root: Root = container.resolve(Root);
     assert.instanceOf(root, Descendant);
   });
@@ -59,10 +57,6 @@ describe('Container', function () {
   });
 
   it('binds instances', function () {
-    container.bind(MockService);
-    container.bind(Child);
-    container.bind(Descendant);
-    container.singleton(Singleton);
     container.instance(Root, container.resolve(Descendant));
     const firstInstance: Root = container.resolve(Root);
     const secondInstance: Root = container.resolve(Root);
@@ -71,18 +65,11 @@ describe('Container', function () {
   });
 
   it('injects dependencies in methods', function () {
-    container.bind(Root);
-    container.bind(Child);
-    container.bind(MockService);
-    container.singleton(Singleton);
     const root: Root = container.resolve(Root);
     assert.instanceOf(root.test(), Singleton);
   });
 
   it('injects decorated arguments', function () {
-    container.bind(Child);
-    container.bind(MockService);
-    container.singleton(Singleton);
     const child: Child = container.resolve(Child);
     assert.instanceOf(child.s1, MockService);
     assert.instanceOf(child.serviceTest(), MockService);
@@ -114,8 +101,6 @@ describe('Container', function () {
   });
 
   it('resolves autowired classes', function () {
-    container.bind(AutowiredClass);
-    container.singleton(Singleton);
     const autowiredClassInstance = new AutowiredClass();
     assert.isTrue(Reflect.getMetadata('works', AutowiredClass.prototype, 'test'));
     assert.isFalse(Reflect.getMetadata('doesntWork', AutowiredClass, 'test'));

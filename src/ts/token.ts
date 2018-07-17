@@ -1,3 +1,3 @@
-import { Class } from './class';
+import { AbstractClass } from './abstract.class';
 
-export type Token<T> = string | symbol | Class<T>;
+export type Token<T> = string | symbol | AbstractClass<T>;

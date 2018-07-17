@@ -70,8 +70,9 @@ container.instance(Symbol.for('abstract'), container.resolve(Concrete));
 ```
 
 ## Dependency resolution
-You must register all your dependencies before trying to resolve them with DI.
-Otherwise `ResolutionError` will be raised.
+You should register all your dependencies before trying to resolve them with DI.
+Otherwise container will try to resolve unregistered dependency 
+and if it won't be injectable `ResolutionError` will be thrown.
 
 If you are using primitives to bind dependencies to container, container can't infer 
 resolved dependency type, so you have to pass type of resolved dependency as type argument.

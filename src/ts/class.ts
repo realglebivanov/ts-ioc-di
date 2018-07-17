@@ -1,9 +1,6 @@
-import { ClassMetadata } from './metadata';
+import { AbstractClass } from './abstract.class';
 
-export interface Class<T> {
-  injectable?: boolean;
-  ___inject_metadata?: ClassMetadata<T>;
-  prototype: T;
+export interface Class<T> extends AbstractClass<T> {
   new(...args: Array<any>): T;
 }
 

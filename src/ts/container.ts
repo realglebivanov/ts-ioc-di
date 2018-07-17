@@ -39,8 +39,11 @@ export class Container {
 
   public resolve<T>(abstract: Token<T>): T {
     const foundBinding = this.bindings.get(abstract);
-    if (foundBinding === undefined) throw new ResolutionError(abstract);
-    return foundBinding.resolve(this);
+    if (foundBinding !== undefined) return foundBinding.resolve(this);
+    if (abstract instanceof Function) {
+      return new ClassBinding(abstract, abstract as Class<T>).resolve(this);
+    }
+    throw new ResolutionError(abstract);
   }
 
   public instance<T, D extends T>(abstract: Token<T>, instance: D): void {
