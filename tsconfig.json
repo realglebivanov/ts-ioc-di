@@ -7,6 +7,8 @@
     "strictNullChecks": true,
     "noEmitOnError": true,
     "noEmitHelpers": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
